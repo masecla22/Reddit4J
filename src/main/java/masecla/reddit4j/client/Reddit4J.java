@@ -10,6 +10,7 @@ import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -83,6 +84,16 @@ public class Reddit4J {
 
 	public ListingEndpointRequest<RedditUser> getBlocked() {
 		return new ListingEndpointRequest<>("/prefs/blocked", this, RedditUser.class);
+	}
+
+	public ListingEndpointRequest<RedditUser> getFriends() {
+		return new ListingEndpointRequest<RedditUser>("/prefs/friends", this, RedditUser.class) {
+			@Override
+			public String preprocess(String body) {
+				JsonArray array = JsonParser.parseString(body).getAsJsonArray();
+				return array.get(0).getAsJsonObject().toString();
+			}
+		};
 	}
 
 	public RedditProfile getSelfProfile() throws IOException, InterruptedException, AuthenticationException {
