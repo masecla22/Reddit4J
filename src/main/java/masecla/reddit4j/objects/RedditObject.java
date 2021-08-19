@@ -7,7 +7,11 @@ public class RedditObject {
 
 	@Override
 	public String toString() {
+		return getGson().toJson(this);
+	}
+	
+	public Gson getGson() {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		return gson.toJson(this);
+		return gson;
 	}
 }
