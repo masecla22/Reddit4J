@@ -27,6 +27,7 @@ import masecla.reddit4j.http.GenericHttpClient;
 import masecla.reddit4j.http.clients.RateLimitedClient;
 import masecla.reddit4j.objects.KarmaBreakdown;
 import masecla.reddit4j.objects.RedditProfile;
+import masecla.reddit4j.objects.RedditTrophy;
 import masecla.reddit4j.objects.RedditUser;
 import masecla.reddit4j.objects.preferences.RedditPreferences;
 import masecla.reddit4j.requests.ListingEndpointRequest;
@@ -133,6 +134,20 @@ public class Reddit4J {
 				return array.get(0).getAsJsonObject().toString();
 			}
 		};
+	}
+
+	public List<RedditTrophy> getTrophies() throws IOException, InterruptedException {
+		Connection conn = authorize(Jsoup.connect(OAUTH_URL + "/api/v1/me/trophies")).method(Method.GET);
+		Response rsp = this.httpClient.execute(conn);
+		List<RedditTrophy> trophies = new ArrayList<>();
+		Gson gson = new RedditTrophy().getGson();
+		JsonArray trophyArray = JsonParser.parseString(rsp.body()).getAsJsonObject().getAsJsonObject("data")
+				.getAsJsonArray("trophies");
+		trophyArray.forEach(c -> {
+			c = c.getAsJsonObject().getAsJsonObject("data");
+			trophies.add(gson.fromJson(c, RedditTrophy.class));
+		});
+		return trophies;
 	}
 
 	public RedditProfile getSelfProfile() throws IOException, InterruptedException, AuthenticationException {
