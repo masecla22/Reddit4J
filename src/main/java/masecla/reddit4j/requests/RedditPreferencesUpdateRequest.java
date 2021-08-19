@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
-import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 
 import masecla.reddit4j.client.Reddit4J;
@@ -32,12 +31,8 @@ public class RedditPreferencesUpdateRequest {
 		Connection conn = client.authorize(Jsoup.connect(Reddit4J.OAUTH_URL() + "/api/v1/me/prefs"))
 				.method(Method.PATCH).ignoreHttpErrors(true).data("raw_json", "1");
 		String jsonSent = new RedditPreferences().getGson().toJson(modifiedValues);
-		System.out.println(jsonSent);
-		// conn.requestBody(jsonSent);
 		conn.data("json", jsonSent);
-		Response rsp = client.getHttpClient().execute(conn);
-
-		System.out.println(rsp.body());
+		client.getHttpClient().execute(conn);
 	}
 
 	public RedditPreferencesUpdateRequest setPrivateMessagePolicy(PrivateMessagePolicy policy) {
