@@ -33,6 +33,14 @@ public class Reddit4JBeta {
 
 		result.add("/prefs/blocked");
 		result.add("/prefs/friends");
+		result.add("/prefs/messaging");
+		result.add("/prefs/trusted");
+		result.add("/prefs/where");
+
+		// Seems to have been discontinued?
+		// https://www.reddit.com/r/bugs/comments/6bw5hd/needs_captcha_api_method_returns_403_forbidden/
+		result.add("/api/needs_captcha");
+
 		return result;
 	}
 
