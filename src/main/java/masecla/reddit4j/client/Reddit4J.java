@@ -117,7 +117,7 @@ public class Reddit4J {
 		prf.setClient(this);
 		return prf;
 	}
-	
+
 	public Reddit4JBeta beta() {
 		return new Reddit4JBeta(this);
 	}
@@ -128,6 +128,20 @@ public class Reddit4J {
 
 	public ListingEndpointRequest<RedditUser> getBlocked() {
 		return new ListingEndpointRequest<>("/prefs/blocked", this, RedditUser.class);
+	}
+
+	public ListingEndpointRequest<RedditUser> getMessaging() {
+		return new ListingEndpointRequest<RedditUser>("/prefs/messaging", this, RedditUser.class) {
+			@Override
+			public String preprocess(String body) {
+				JsonArray array = JsonParser.parseString(body).getAsJsonArray();
+				return array.get(0).getAsJsonObject().toString();
+			}
+		};
+	}
+
+	public ListingEndpointRequest<RedditUser> getTrusted() {
+		return new ListingEndpointRequest<>("/prefs/trusted", this, RedditUser.class);
 	}
 
 	public ListingEndpointRequest<RedditUser> getFriends() {
