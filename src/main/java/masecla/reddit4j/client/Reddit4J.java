@@ -117,6 +117,10 @@ public class Reddit4J {
 		prf.setClient(this);
 		return prf;
 	}
+	
+	public Reddit4JBeta beta() {
+		return new Reddit4JBeta(this);
+	}
 
 	public RedditPreferencesUpdateRequest updatePreferences() {
 		return new RedditPreferencesUpdateRequest(this);
