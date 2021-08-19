@@ -1,8 +1,16 @@
 package masecla.reddit4j.client;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.net.HttpURLConnection;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
@@ -17,11 +25,15 @@ import com.google.gson.JsonParser;
 import masecla.reddit4j.exceptions.AuthenticationException;
 import masecla.reddit4j.http.GenericHttpClient;
 import masecla.reddit4j.http.clients.RateLimitedClient;
+import masecla.reddit4j.objects.KarmaBreakdown;
 import masecla.reddit4j.objects.RedditProfile;
 import masecla.reddit4j.objects.RedditUser;
+import masecla.reddit4j.objects.preferences.RedditPreferences;
 import masecla.reddit4j.requests.ListingEndpointRequest;
+import masecla.reddit4j.requests.RedditPreferencesUpdateRequest;
 
 public class Reddit4J {
+
 	private static String BASE_URL = "https://www.reddit.com";
 	private static String OAUTH_URL = "https://oauth.reddit.com";
 
@@ -34,6 +46,10 @@ public class Reddit4J {
 	private String token;
 	private long expirationDate = -1;
 	private GenericHttpClient httpClient;
+
+	protected Reddit4J() {
+		initialize();
+	}
 
 	public void connect() throws IOException, InterruptedException, AuthenticationException {
 		if (userAgent == null) {
@@ -80,6 +96,29 @@ public class Reddit4J {
 			connect();
 			return;
 		}
+	}
+
+	public List<KarmaBreakdown> getKarmaBreakdown() throws IOException, InterruptedException {
+		Connection conn = authorize(Jsoup.connect(OAUTH_URL + "/api/v1/me/karma")).method(Method.GET);
+		Response rsp = this.httpClient.execute(conn);
+		List<KarmaBreakdown> result = new ArrayList<>();
+		Gson gson = new Gson();
+		JsonParser.parseString(rsp.body()).getAsJsonObject().get("data").getAsJsonArray()
+				.forEach(c -> result.add(gson.fromJson(c, KarmaBreakdown.class)));
+		return result;
+	}
+
+	public RedditPreferences getPreferences() throws IOException, InterruptedException {
+		Connection conn = authorize(Jsoup.connect(OAUTH_URL + "/api/v1/me/prefs")).method(Method.GET);
+		Response rsp = this.httpClient.execute(conn);
+		Gson gson = new RedditPreferences().getGson();
+		RedditPreferences prf = gson.fromJson(rsp.body(), RedditPreferences.class);
+		prf.setClient(this);
+		return prf;
+	}
+
+	public RedditPreferencesUpdateRequest updatePreferences() {
+		return new RedditPreferencesUpdateRequest(this);
 	}
 
 	public ListingEndpointRequest<RedditUser> getBlocked() {
@@ -181,6 +220,44 @@ public class Reddit4J {
 
 	public static String OAUTH_URL() {
 		return OAUTH_URL;
+	}
+
+	private static boolean initialized = false;
+
+	private static void initialize() {
+		if (initialized)
+			return;
+		initialized = true;
+		allowMethods("PATCH");
+	}
+
+	/**
+	 * This will force the {@link HttpURLConnection} to accept methods which would
+	 * otherwise not be allowed, such as PATCH. See
+	 * https://bugs.openjdk.java.net/browse/JDK-7016595, and
+	 * https://stackoverflow.com/questions/25163131/httpurlconnection-invalid-http-method-patch
+	 * 
+	 * @param methods - The methods to force {@link HttpURLConnection} to take.
+	 */
+	private static void allowMethods(String... methods) {
+		try {
+			Field methodsField = HttpURLConnection.class.getDeclaredField("methods");
+
+			Field modifiersField = Field.class.getDeclaredField("modifiers");
+			modifiersField.setAccessible(true);
+			modifiersField.setInt(methodsField, methodsField.getModifiers() & ~Modifier.FINAL);
+
+			methodsField.setAccessible(true);
+
+			String[] oldMethods = (String[]) methodsField.get(null);
+			Set<String> methodsSet = new LinkedHashSet<>(Arrays.asList(oldMethods));
+			methodsSet.addAll(Arrays.asList(methods));
+			String[] newMethods = methodsSet.toArray(new String[0]);
+
+			methodsField.set(null, newMethods);
+		} catch (NoSuchFieldException | IllegalAccessException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 }
