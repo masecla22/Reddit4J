@@ -27,6 +27,7 @@ import masecla.reddit4j.http.GenericHttpClient;
 import masecla.reddit4j.http.clients.RateLimitedClient;
 import masecla.reddit4j.objects.KarmaBreakdown;
 import masecla.reddit4j.objects.RedditProfile;
+import masecla.reddit4j.objects.RedditSubreddit;
 import masecla.reddit4j.objects.RedditTrophy;
 import masecla.reddit4j.objects.RedditUser;
 import masecla.reddit4j.objects.preferences.RedditPreferences;
@@ -142,6 +143,16 @@ public class Reddit4J {
 
 	public ListingEndpointRequest<RedditUser> getTrusted() {
 		return new ListingEndpointRequest<>("/prefs/trusted", this, RedditUser.class);
+	}
+
+	public RedditSubreddit getSubreddit(String name) {
+		if (name.startsWith("r/"))
+			name = name.substring(2);
+		if (name.startsWith("/"))
+			name = name.substring(1);
+		if (name.endsWith("/"))
+			name = name.substring(0, name.length() - 1);
+		return new RedditSubreddit(name, this);
 	}
 
 	public ListingEndpointRequest<RedditUser> getFriends() {
