@@ -27,10 +27,10 @@ import masecla.reddit4j.http.GenericHttpClient;
 import masecla.reddit4j.http.clients.RateLimitedClient;
 import masecla.reddit4j.objects.KarmaBreakdown;
 import masecla.reddit4j.objects.RedditProfile;
-import masecla.reddit4j.objects.RedditSubreddit;
 import masecla.reddit4j.objects.RedditTrophy;
 import masecla.reddit4j.objects.RedditUser;
 import masecla.reddit4j.objects.preferences.RedditPreferences;
+import masecla.reddit4j.objects.subreddit.RedditSubreddit;
 import masecla.reddit4j.requests.ListingEndpointRequest;
 import masecla.reddit4j.requests.RedditPreferencesUpdateRequest;
 
@@ -145,14 +145,22 @@ public class Reddit4J {
 		return new ListingEndpointRequest<>("/prefs/trusted", this, RedditUser.class);
 	}
 
-	public RedditSubreddit getSubreddit(String name) {
+	public RedditSubreddit getSubreddit(String name) throws IOException, InterruptedException {
 		if (name.startsWith("r/"))
 			name = name.substring(2);
 		if (name.startsWith("/"))
 			name = name.substring(1);
 		if (name.endsWith("/"))
 			name = name.substring(0, name.length() - 1);
-		return new RedditSubreddit(name, this);
+
+		Connection conn = Jsoup.connect(OAUTH_URL + "/r/" + name + "/about");
+		conn = authorize(conn);
+		Response rsp = this.httpClient.execute(conn);
+		Gson gson = new RedditSubreddit().getGson();
+		JsonObject data = JsonParser.parseString(rsp.body()).getAsJsonObject().getAsJsonObject("data");
+		RedditSubreddit result = gson.fromJson(data, RedditSubreddit.class);
+		result.setClient(this);
+		return result;
 	}
 
 	public ListingEndpointRequest<RedditUser> getFriends() {
