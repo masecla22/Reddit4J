@@ -83,13 +83,10 @@ public class Reddit4J {
 		this.expirationDate = object.get("expires_in").getAsInt() + Instant.now().getEpochSecond();
 	}
 
-	@Deprecated
-	public Connection authorize(Connection connection) {
-		return connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
-	}
-
 	public Connection useEndpoint(String endpointPath) {
-		return authorize(Jsoup.connect(OAUTH_URL + endpointPath));
+		Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
+		connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
+		return connection;
 	}
 
 	public void ensureConnection() throws IOException, InterruptedException, AuthenticationException {
@@ -106,7 +103,7 @@ public class Reddit4J {
 	}
 
 	public List<KarmaBreakdown> getKarmaBreakdown() throws IOException, InterruptedException {
-		Connection conn = authorize(Jsoup.connect(OAUTH_URL + "/api/v1/me/karma")).method(Method.GET);
+		Connection conn = useEndpoint("/api/v1/me/karma").method(Method.GET);
 		Response rsp = this.httpClient.execute(conn);
 		List<KarmaBreakdown> result = new ArrayList<>();
 		Gson gson = new Gson();
@@ -116,7 +113,7 @@ public class Reddit4J {
 	}
 
 	public RedditPreferences getPreferences() throws IOException, InterruptedException {
-		Connection conn = authorize(Jsoup.connect(OAUTH_URL + "/api/v1/me/prefs")).method(Method.GET);
+		Connection conn = useEndpoint("/api/v1/me/prefs").method(Method.GET);
 		Response rsp = this.httpClient.execute(conn);
 		Gson gson = new RedditPreferences().getGson();
 		RedditPreferences prf = gson.fromJson(rsp.body(), RedditPreferences.class);
@@ -159,7 +156,6 @@ public class Reddit4J {
 			name = name.substring(0, name.length() - 1);
 
 		Connection conn = Jsoup.connect(OAUTH_URL + "/r/" + name + "/about");
-		conn = authorize(conn);
 		Response rsp = this.httpClient.execute(conn);
 		Gson gson = new RedditSubreddit().getGson();
 		JsonObject data = JsonParser.parseString(rsp.body()).getAsJsonObject().getAsJsonObject("data");
@@ -179,7 +175,7 @@ public class Reddit4J {
 	}
 
 	public List<RedditTrophy> getTrophies() throws IOException, InterruptedException {
-		Connection conn = authorize(Jsoup.connect(OAUTH_URL + "/api/v1/me/trophies")).method(Method.GET);
+		Connection conn = useEndpoint("/api/v1/me/trophies").method(Method.GET);
 		Response rsp = this.httpClient.execute(conn);
 		List<RedditTrophy> trophies = new ArrayList<>();
 		Gson gson = new RedditTrophy().getGson();
@@ -194,7 +190,7 @@ public class Reddit4J {
 
 	public RedditProfile getSelfProfile() throws IOException, InterruptedException, AuthenticationException {
 		ensureConnection();
-		Connection request = authorize(Jsoup.connect(OAUTH_URL + "/api/v1/me"));
+		Connection request = useEndpoint("/api/v1/me");
 		Response rsp = httpClient.execute(request);
 		RedditProfile properties = new Gson().fromJson(rsp.body(), RedditProfile.class);
 		return properties;
