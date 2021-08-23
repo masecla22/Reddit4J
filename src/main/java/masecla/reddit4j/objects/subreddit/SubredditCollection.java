@@ -13,10 +13,10 @@ public class SubredditCollection extends RedditObject {
 	private String author_id;
 	private String author_name;
 	private UUID collection_id;
-	private long created_at_utc;
+	private double created_at_utc;
 	private String description;
 	private DisplayLayout display_layout;
-	private long last_update_utc;
+	private double last_update_utc;
 	private String[] link_ids;
 	private String permalink;
 	private String subreddit_id;
@@ -42,7 +42,7 @@ public class SubredditCollection extends RedditObject {
 		return collection_id;
 	}
 
-	public long getCreatedAtUTC() {
+	public double getCreatedAtUTC() {
 		return created_at_utc;
 	}
 
@@ -54,7 +54,7 @@ public class SubredditCollection extends RedditObject {
 		return display_layout;
 	}
 
-	public long getLastUpdatedUTC() {
+	public double getLastUpdatedUTC() {
 		return last_update_utc;
 	}
 

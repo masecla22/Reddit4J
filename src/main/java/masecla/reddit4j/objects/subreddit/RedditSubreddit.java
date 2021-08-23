@@ -21,6 +21,7 @@ import masecla.reddit4j.objects.RedditThing;
 import masecla.reddit4j.objects.adapters.ColorAdapter;
 import masecla.reddit4j.objects.adapters.DimensionAdapter;
 import masecla.reddit4j.objects.preferences.enums.Language;
+import masecla.reddit4j.requests.CollectionCreationRequest;
 
 public class RedditSubreddit extends RedditThing {
 	private boolean accept_followers;
@@ -155,6 +156,10 @@ public class RedditSubreddit extends RedditThing {
 		List<SubredditCollection> collections = new ArrayList<>();
 		array.forEach(c -> collections.add(gson.fromJson(c, SubredditCollection.class)));
 		return collections;
+	}
+	
+	public CollectionCreationRequest createCollection() {
+		return new CollectionCreationRequest(client, this);
 	}
 
 	public void setClient(Reddit4J client) {

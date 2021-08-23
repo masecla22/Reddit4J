@@ -7,25 +7,23 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
-import masecla.reddit4j.objects.preferences.enums.DefaultCommentSort;
-
 public enum DisplayLayout {
 	TIMELINE, GALLERY;
 
-	public static TypeAdapter<DefaultCommentSort> getAdapter() {
-		return new TypeAdapter<DefaultCommentSort>() {
+	public static TypeAdapter<DisplayLayout> getAdapter() {
+		return new TypeAdapter<DisplayLayout>() {
 
 			@Override
-			public void write(JsonWriter out, DefaultCommentSort value) throws IOException {
+			public void write(JsonWriter out, DisplayLayout value) throws IOException {
 				out.value(value.toString().toLowerCase());
 			}
 
 			@Override
-			public DefaultCommentSort read(JsonReader in) throws IOException {
+			public DisplayLayout read(JsonReader in) throws IOException {
 				JsonToken token = in.peek();
 				try {
 					if (token.equals(JsonToken.STRING))
-						return DefaultCommentSort.valueOf(in.nextString().toUpperCase());
+						return DisplayLayout.valueOf(in.nextString().toUpperCase());
 					else if (token.equals(JsonToken.NULL)) {
 						in.nextNull();
 						return null;
