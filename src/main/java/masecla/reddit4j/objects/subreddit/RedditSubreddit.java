@@ -5,13 +5,14 @@ import java.awt.Dimension;
 import java.io.IOException;
 
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.Connection.Response;
+import org.jsoup.Jsoup;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import masecla.reddit4j.client.Reddit4J;
+import masecla.reddit4j.exceptions.PermissionException;
 import masecla.reddit4j.objects.RedditThing;
 import masecla.reddit4j.objects.adapters.ColorAdapter;
 import masecla.reddit4j.objects.adapters.DimensionAdapter;
@@ -119,7 +120,6 @@ public class RedditSubreddit extends RedditThing {
 
 	private transient Reddit4J client;
 
-
 	@Override
 	public Gson getGson() {
 		GsonBuilder builder = new GsonBuilder();
@@ -130,13 +130,17 @@ public class RedditSubreddit extends RedditThing {
 		return builder.create();
 	}
 
-	public void getAbout() throws IOException, InterruptedException {
-		Connection conn = Jsoup.connect(Reddit4J.OAUTH_URL()+"/"+display_name_prefixed+"/about/edit");
-		conn = client.authorize(conn);
+	public SubredditSettings getSettings() throws IOException, InterruptedException, PermissionException {
+		Connection conn = Jsoup.connect(Reddit4J.OAUTH_URL() + "/" + display_name_prefixed + "/about/edit");
+		conn = client.authorize(conn).ignoreHttpErrors(true);
 		Response rsp = client.getHttpClient().execute(conn);
-		System.out.println(rsp.body());
+		if (rsp.statusCode() == 404) {
+			throw new PermissionException("You cannot edit the settings for " + display_name_prefixed + "!");
+		}
+		Gson gson = this.getGson();
+		return gson.fromJson(rsp.body(), SubredditSettings.class);
 	}
-	
+
 	public void setClient(Reddit4J client) {
 		this.client = client;
 	}
@@ -345,7 +349,7 @@ public class RedditSubreddit extends RedditThing {
 		return mobile_banner_image;
 	}
 
-	public String getName() {
+	public String getFullName() {
 		return name;
 	}
 

@@ -42,7 +42,8 @@ public class Reddit4JBeta {
 		result.add("/api/needs_captcha");
 
 		result.add("/r/subreddit/about");
-		
+		result.add("/r/subreddit/about/edit");
+
 		return result;
 	}
 
