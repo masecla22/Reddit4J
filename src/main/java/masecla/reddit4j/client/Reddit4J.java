@@ -83,8 +83,13 @@ public class Reddit4J {
 		this.expirationDate = object.get("expires_in").getAsInt() + Instant.now().getEpochSecond();
 	}
 
+	@Deprecated
 	public Connection authorize(Connection connection) {
 		return connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
+	}
+
+	public Connection useEndpoint(String endpointPath) {
+		return authorize(Jsoup.connect(OAUTH_URL + endpointPath));
 	}
 
 	public void ensureConnection() throws IOException, InterruptedException, AuthenticationException {
