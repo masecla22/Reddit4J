@@ -10,7 +10,6 @@ import java.util.UUID;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
-import org.jsoup.Jsoup;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -138,8 +137,8 @@ public class RedditSubreddit extends RedditThing {
 	}
 
 	public SubredditSettings getSettings() throws IOException, InterruptedException, PermissionException {
-		Connection conn = Jsoup.connect(Reddit4J.OAUTH_URL() + "/" + display_name_prefixed + "/about/edit");
-		conn = client.authorize(conn).ignoreHttpErrors(true);
+		Connection conn = client.useEndpoint("/" + display_name_prefixed + "/about/edit");
+		conn.ignoreHttpErrors(true);
 		Response rsp = client.getHttpClient().execute(conn);
 		if (rsp.statusCode() == 404) {
 			throw new PermissionException("You cannot edit the settings for " + display_name_prefixed + "!");
@@ -149,9 +148,8 @@ public class RedditSubreddit extends RedditThing {
 	}
 
 	public List<SubredditCollection> getCollections() throws IOException, InterruptedException {
-		Connection conn = Jsoup.connect(Reddit4J.OAUTH_URL() + "/api/v1/collections/subreddit_collections");
+		Connection conn = client.useEndpoint("/api/v1/collections/subreddit_collections");
 		conn.data("sr_fullname", this.getFullName());
-		conn = client.authorize(conn);
 		Response rsp = client.getHttpClient().execute(conn);
 		Gson gson = new SubredditCollection().getGson();
 		JsonArray array = JsonParser.parseString(rsp.body()).getAsJsonArray();
@@ -161,8 +159,7 @@ public class RedditSubreddit extends RedditThing {
 	}
 
 	public SubredditCollection getCollection(UUID id, boolean includeLinks) throws IOException, InterruptedException {
-		Connection conn = Jsoup.connect(Reddit4J.OAUTH_URL() + "/api/v1/collections/collection");
-		conn = this.client.authorize(conn);
+		Connection conn = client.useEndpoint("/api/v1/collections/collection");
 		conn.data("collection_id", id.toString()).data("include_links", includeLinks + "");
 		Response rsp = client.getHttpClient().execute(conn);
 		SubredditCollection result = new SubredditCollection().getGson().fromJson(rsp.body(),
@@ -176,8 +173,8 @@ public class RedditSubreddit extends RedditThing {
 	}
 
 	public void deleteCollection(UUID id) throws IOException, InterruptedException {
-		Connection conn = Jsoup.connect(Reddit4J.OAUTH_URL() + "/api/v1/collections/delete_collection");
-		conn = this.client.authorize(conn).method(Method.POST);
+		Connection conn = client.useEndpoint("/api/v1/collections/delete_collection");
+		conn.method(Method.POST);
 		conn.data("collection_id", id.toString());
 		Response rsp = client.getHttpClient().execute(conn);
 		JsonArray array = JsonParser.parseString(rsp.body()).getAsJsonObject().getAsJsonObject("json")
@@ -187,6 +184,31 @@ public class RedditSubreddit extends RedditThing {
 			array.forEach(c -> res.add(c.toString()));
 			throw new IllegalStateException(String.join(", ", res));
 		}
+	}
+
+	protected void setFollowCollection(UUID id, boolean follow) throws IOException, InterruptedException {
+		Connection conn = client.useEndpoint("/api/v1/collections/follow_collection");
+		conn = conn.method(Method.POST).ignoreHttpErrors(true);
+		conn.data("collection_id", id.toString()).data("follow", follow + "");
+		Response rsp = client.getHttpClient().execute(conn);
+		if (rsp.statusCode() == 500) {
+			throw new IllegalArgumentException("Collection " + id + " not found!");
+		}
+		JsonArray array = JsonParser.parseString(rsp.body()).getAsJsonObject().getAsJsonObject("json")
+				.getAsJsonArray("errors");
+		if (array.size() != 0) {
+			List<String> res = new ArrayList<>();
+			array.forEach(c -> res.add(c.toString()));
+			throw new IllegalStateException(String.join(", ", res));
+		}
+	}
+
+	public void followCollection(UUID id) throws IOException, InterruptedException {
+		setFollowCollection(id, true);
+	}
+
+	public void unfollowCollection(UUID id) throws IOException, InterruptedException {
+		setFollowCollection(id, false);
 	}
 
 	public CollectionCreationRequest createCollection() {

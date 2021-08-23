@@ -24,7 +24,7 @@ public class SubredditCollection extends RedditObject {
 	private String title;
 
 	private transient RedditSubreddit subreddit;
-	
+
 	protected void setSubreddit(RedditSubreddit subreddit) {
 		this.subreddit = subreddit;
 	}
@@ -39,6 +39,14 @@ public class SubredditCollection extends RedditObject {
 
 	public void delete() throws IOException, InterruptedException {
 		subreddit.deleteCollection(collection_id);
+	}
+
+	public void follow() throws IOException, InterruptedException {
+		subreddit.followCollection(collection_id);
+	}
+
+	public void unfollow() throws IOException, InterruptedException {
+		subreddit.unfollowCollection(collection_id);
 	}
 
 	public String getAuthorId() {

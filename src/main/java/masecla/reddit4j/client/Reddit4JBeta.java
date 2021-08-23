@@ -42,8 +42,10 @@ public class Reddit4JBeta {
 		result.add("/api/needs_captcha");
 
 		result.add("/api/v1/collections/collection");
+		result.add("/api/v1/collections/follow_collection");
 		result.add("/api/v1/collections/create_collection");
 		result.add("/api/v1/collections/delete_collection");
+		result.add("/api/v1/collections/subreddit_collections");
 
 		result.add("/r/subreddit/about");
 		result.add("/r/subreddit/about/edit");
