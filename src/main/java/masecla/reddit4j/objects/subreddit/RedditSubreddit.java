@@ -125,6 +125,10 @@ public class RedditSubreddit extends RedditThing {
 	private int wls;
 
 	private transient Reddit4J client;
+	
+	public Reddit4J getClient() {
+		return client;
+	}
 
 	@Override
 	public Gson getGson() {

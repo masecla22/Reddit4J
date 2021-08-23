@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 import masecla.reddit4j.objects.RedditObject;
 import masecla.reddit4j.objects.adapters.UUIDAdapter;
 import masecla.reddit4j.objects.subreddit.enums.DisplayLayout;
+import masecla.reddit4j.requests.CollectionEditingRequest;
 
 public class SubredditCollection extends RedditObject {
 	private String author_id;
@@ -35,6 +36,10 @@ public class SubredditCollection extends RedditObject {
 		builder.registerTypeAdapter(UUID.class, new UUIDAdapter());
 		builder.registerTypeAdapter(DisplayLayout.class, DisplayLayout.getAdapter());
 		return builder.create();
+	}
+
+	public CollectionEditingRequest update() {
+		return new CollectionEditingRequest(this, subreddit.getClient());
 	}
 
 	public void delete() throws IOException, InterruptedException {
