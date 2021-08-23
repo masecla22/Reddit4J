@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jsoup.Connection;
+import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 
@@ -164,11 +165,28 @@ public class RedditSubreddit extends RedditThing {
 		conn = this.client.authorize(conn);
 		conn.data("collection_id", id.toString()).data("include_links", includeLinks + "");
 		Response rsp = client.getHttpClient().execute(conn);
-		return new SubredditCollection().getGson().fromJson(rsp.body(), SubredditCollection.class);
+		SubredditCollection result = new SubredditCollection().getGson().fromJson(rsp.body(),
+				SubredditCollection.class);
+		result.setSubreddit(this);
+		return result;
 	}
 
 	public SubredditCollection getCollection(UUID id) throws IOException, InterruptedException {
 		return getCollection(id, true);
+	}
+
+	public void deleteCollection(UUID id) throws IOException, InterruptedException {
+		Connection conn = Jsoup.connect(Reddit4J.OAUTH_URL() + "/api/v1/collections/delete_collection");
+		conn = this.client.authorize(conn).method(Method.POST);
+		conn.data("collection_id", id.toString());
+		Response rsp = client.getHttpClient().execute(conn);
+		JsonArray array = JsonParser.parseString(rsp.body()).getAsJsonObject().getAsJsonObject("json")
+				.getAsJsonArray("errors");
+		if (array.size() != 0) {
+			List<String> res = new ArrayList<>();
+			array.forEach(c -> res.add(c.toString()));
+			throw new IllegalStateException(String.join(", ", res));
+		}
 	}
 
 	public CollectionCreationRequest createCollection() {

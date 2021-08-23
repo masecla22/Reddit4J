@@ -1,5 +1,6 @@
 package masecla.reddit4j.objects.subreddit;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import com.google.gson.Gson;
@@ -22,12 +23,22 @@ public class SubredditCollection extends RedditObject {
 	private String subreddit_id;
 	private String title;
 
+	private transient RedditSubreddit subreddit;
+	
+	protected void setSubreddit(RedditSubreddit subreddit) {
+		this.subreddit = subreddit;
+	}
+
 	@Override
 	public Gson getGson() {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(UUID.class, new UUIDAdapter());
 		builder.registerTypeAdapter(DisplayLayout.class, DisplayLayout.getAdapter());
 		return builder.create();
+	}
+
+	public void delete() throws IOException, InterruptedException {
+		subreddit.deleteCollection(collection_id);
 	}
 
 	public String getAuthorId() {

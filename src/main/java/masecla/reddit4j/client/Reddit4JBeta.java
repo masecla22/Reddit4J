@@ -41,6 +41,10 @@ public class Reddit4JBeta {
 		// https://www.reddit.com/r/bugs/comments/6bw5hd/needs_captcha_api_method_returns_403_forbidden/
 		result.add("/api/needs_captcha");
 
+		result.add("/api/v1/collections/collection");
+		result.add("/api/v1/collections/create_collection");
+		result.add("/api/v1/collections/delete_collection");
+
 		result.add("/r/subreddit/about");
 		result.add("/r/subreddit/about/edit");
 
