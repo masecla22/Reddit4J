@@ -155,7 +155,7 @@ public class Reddit4J {
 		if (name.endsWith("/"))
 			name = name.substring(0, name.length() - 1);
 
-		Connection conn = Jsoup.connect(OAUTH_URL + "/r/" + name + "/about");
+		Connection conn = useEndpoint("/r/" + name + "/about");
 		Response rsp = this.httpClient.execute(conn);
 		Gson gson = new RedditSubreddit().getGson();
 		JsonObject data = JsonParser.parseString(rsp.body()).getAsJsonObject().getAsJsonObject("data");
