@@ -3,6 +3,8 @@ package masecla.reddit4j.objects.subreddit;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Connection;
 import org.jsoup.Connection.Response;
@@ -10,6 +12,8 @@ import org.jsoup.Jsoup;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 
 import masecla.reddit4j.client.Reddit4J;
 import masecla.reddit4j.exceptions.PermissionException;
@@ -139,6 +143,18 @@ public class RedditSubreddit extends RedditThing {
 		}
 		Gson gson = this.getGson();
 		return gson.fromJson(rsp.body(), SubredditSettings.class);
+	}
+
+	public List<SubredditCollection> getCollections() throws IOException, InterruptedException {
+		Connection conn = Jsoup.connect(Reddit4J.OAUTH_URL() + "/api/v1/collections/subreddit_collections");
+		conn.data("sr_fullname", this.getFullName());
+		conn = client.authorize(conn);
+		Response rsp = client.getHttpClient().execute(conn);
+		Gson gson = new SubredditCollection().getGson();
+		JsonArray array = JsonParser.parseString(rsp.body()).getAsJsonArray();
+		List<SubredditCollection> collections = new ArrayList<>();
+		array.forEach(c -> collections.add(gson.fromJson(c, SubredditCollection.class)));
+		return collections;
 	}
 
 	public void setClient(Reddit4J client) {
