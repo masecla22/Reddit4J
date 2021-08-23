@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 
 import masecla.reddit4j.objects.RedditObject;
 import masecla.reddit4j.objects.adapters.UUIDAdapter;
+import masecla.reddit4j.objects.subreddit.enums.DisplayLayout;
 
 public class SubredditCollection extends RedditObject {
 	private String author_id;
@@ -14,7 +15,7 @@ public class SubredditCollection extends RedditObject {
 	private UUID collection_id;
 	private long created_at_utc;
 	private String description;
-	private String display_layout;
+	private DisplayLayout display_layout;
 	private long last_update_utc;
 	private String[] link_ids;
 	private String permalink;
@@ -25,6 +26,7 @@ public class SubredditCollection extends RedditObject {
 	public Gson getGson() {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(UUID.class, new UUIDAdapter());
+		builder.registerTypeAdapter(DisplayLayout.class, DisplayLayout.getAdapter());
 		return builder.create();
 	}
 
@@ -48,7 +50,7 @@ public class SubredditCollection extends RedditObject {
 		return description;
 	}
 
-	public String getDisplayLayout() {
+	public DisplayLayout getDisplayLayout() {
 		return display_layout;
 	}
 
