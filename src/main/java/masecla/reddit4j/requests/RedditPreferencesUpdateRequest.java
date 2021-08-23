@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
-import org.jsoup.Jsoup;
 
 import masecla.reddit4j.client.Reddit4J;
 import masecla.reddit4j.objects.preferences.RedditPreferences;
@@ -28,8 +27,8 @@ public class RedditPreferencesUpdateRequest {
 	}
 
 	public void execute() throws IOException, InterruptedException {
-		Connection conn = client.authorize(Jsoup.connect(Reddit4J.OAUTH_URL() + "/api/v1/me/prefs"))
-				.method(Method.PATCH).ignoreHttpErrors(true).data("raw_json", "1");
+		Connection conn = client.useEndpoint("/api/v1/me/prefs").method(Method.PATCH).ignoreHttpErrors(true)
+				.data("raw_json", "1");
 		String jsonSent = new RedditPreferences().getGson().toJson(modifiedValues);
 		conn.data("json", jsonSent);
 		client.getHttpClient().execute(conn);

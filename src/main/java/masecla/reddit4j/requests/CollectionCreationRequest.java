@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
-import org.jsoup.Jsoup;
 
 import masecla.reddit4j.client.Reddit4J;
 import masecla.reddit4j.objects.subreddit.RedditSubreddit;
@@ -46,8 +45,8 @@ public class CollectionCreationRequest {
 	}
 
 	public SubredditCollection execute() throws IOException, InterruptedException {
-		Connection conn = Jsoup.connect(Reddit4J.OAUTH_URL() + "/api/v1/collections/create_collection");
-		conn = client.authorize(conn).method(Method.POST);
+		Connection conn = client.useEndpoint("/api/v1/collections/create_collection");
+		conn = conn.method(Method.POST);
 		conn.data("description", description);
 		conn.data("display_layout", displayLayout.toString());
 		conn.data("sr_fullname", subreddit.getFullName());

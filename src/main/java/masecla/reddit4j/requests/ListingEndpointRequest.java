@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.jsoup.Connection;
 import org.jsoup.Connection.Response;
-import org.jsoup.Jsoup;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -40,7 +39,7 @@ public class ListingEndpointRequest<T extends RedditThing> {
 
 	public List<T> submit() throws IOException, InterruptedException, AuthenticationException {
 		client.ensureConnection();
-		Connection conn = Jsoup.connect(Reddit4J.OAUTH_URL() + endpointPath);
+		Connection conn = client.useEndpoint(endpointPath);
 
 		if (after != null)
 			conn.data("after", after.getId());
@@ -55,7 +54,6 @@ public class ListingEndpointRequest<T extends RedditThing> {
 		if (show)
 			conn.data("show", "all");
 
-		conn = client.authorize(conn);
 		Response rsp = conn.execute();
 		JsonArray array = JsonParser.parseString(preprocess(rsp.body())).getAsJsonObject().getAsJsonObject("data")
 				.getAsJsonArray("children");
