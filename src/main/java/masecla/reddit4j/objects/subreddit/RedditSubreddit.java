@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.jsoup.Connection;
 import org.jsoup.Connection.Response;
@@ -157,7 +158,19 @@ public class RedditSubreddit extends RedditThing {
 		array.forEach(c -> collections.add(gson.fromJson(c, SubredditCollection.class)));
 		return collections;
 	}
-	
+
+	public SubredditCollection getCollection(UUID id, boolean includeLinks) throws IOException, InterruptedException {
+		Connection conn = Jsoup.connect(Reddit4J.OAUTH_URL() + "/api/v1/collections/collection");
+		conn = this.client.authorize(conn);
+		conn.data("collection_id", id.toString()).data("include_links", includeLinks + "");
+		Response rsp = client.getHttpClient().execute(conn);
+		return new SubredditCollection().getGson().fromJson(rsp.body(), SubredditCollection.class);
+	}
+
+	public SubredditCollection getCollection(UUID id) throws IOException, InterruptedException {
+		return getCollection(id, true);
+	}
+
 	public CollectionCreationRequest createCollection() {
 		return new CollectionCreationRequest(client, this);
 	}
