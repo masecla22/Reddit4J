@@ -46,6 +46,12 @@ public class Reddit4JBeta {
 		result.add("/api/v1/collections/create_collection");
 		result.add("/api/v1/collections/delete_collection");
 		result.add("/api/v1/collections/subreddit_collections");
+		result.add("/api/v1/collections/update_collection_title");
+		result.add("/api/v1/collections/update_collection_display_layout");
+		result.add("/api/v1/collections/update_collection_description");
+
+		result.add("/api/v1/subreddit/emojis/all");
+		result.add("/api/v1/subreddit/emoji_custom_size");
 
 		result.add("/r/subreddit/about");
 		result.add("/r/subreddit/about/edit");

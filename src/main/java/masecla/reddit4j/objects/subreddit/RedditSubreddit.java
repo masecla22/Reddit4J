@@ -14,6 +14,7 @@ import org.jsoup.Connection.Response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import masecla.reddit4j.client.Reddit4J;
@@ -225,12 +226,34 @@ public class RedditSubreddit extends RedditThing {
 			throw new IllegalArgumentException("Custom emoji width must be between 1 and 40!");
 		if (size.height < 1 || size.height > 40)
 			throw new IllegalArgumentException("Custom emoji height must be between 1 and 40!");
-		
+
 		conn.data("height", ((int) size.getHeight()) + "");
 		conn.data("width", ((int) size.getWidth()) + "");
 		this.emojis_custom_size = size;
 
 		this.client.getHttpClient().execute(conn);
+	}
+
+	public List<SubredditEmoji> getSubredditEmojis() throws IOException, InterruptedException {
+		Connection conn = this.client.useEndpoint("/api/v1/" + display_name + "/emojis/all");
+		Response rsp = this.client.getHttpClient().execute(conn);
+		JsonObject object = JsonParser.parseString(rsp.body()).getAsJsonObject();
+
+		List<SubredditEmoji> subredditEmojis = new ArrayList<>();
+		for (String emojiSetName : object.keySet()) {
+			JsonObject emojiSet = object.getAsJsonObject(emojiSetName);
+			boolean snoomojis = emojiSetName.equals("snoomojis");
+			for (String currentName : emojiSet.keySet()) {
+				SubredditEmoji currentEmoji = this.getGson().fromJson(emojiSet.getAsJsonObject(currentName),
+						SubredditEmoji.class);
+				currentEmoji.setSnoomoji(snoomojis);
+				currentEmoji.setName(currentName);
+
+				subredditEmojis.add(currentEmoji);
+			}
+		}
+
+		return subredditEmojis;
 	}
 
 	public void setClient(Reddit4J client) {
