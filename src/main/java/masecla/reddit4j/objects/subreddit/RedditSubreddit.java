@@ -125,7 +125,7 @@ public class RedditSubreddit extends RedditThing {
 	private int wls;
 
 	private transient Reddit4J client;
-	
+
 	public Reddit4J getClient() {
 		return client;
 	}
@@ -217,6 +217,20 @@ public class RedditSubreddit extends RedditThing {
 
 	public CollectionCreationRequest createCollection() {
 		return new CollectionCreationRequest(client, this);
+	}
+
+	public void setEmojisCustomSize(Dimension size) throws IOException, InterruptedException {
+		Connection conn = this.client.useEndpoint("/api/v1/" + display_name + "/emoji_custom_size").method(Method.POST);
+		if (size.width < 1 || size.width > 40)
+			throw new IllegalArgumentException("Custom emoji width must be between 1 and 40!");
+		if (size.height < 1 || size.height > 40)
+			throw new IllegalArgumentException("Custom emoji height must be between 1 and 40!");
+		
+		conn.data("height", ((int) size.getHeight()) + "");
+		conn.data("width", ((int) size.getWidth()) + "");
+		this.emojis_custom_size = size;
+
+		this.client.getHttpClient().execute(conn);
 	}
 
 	public void setClient(Reddit4J client) {
