@@ -1,6 +1,6 @@
 package masecla.reddit4j.exceptions;
 
-public class PermissionException extends Exception {
+public class PermissionException extends RuntimeException {
 	private static final long serialVersionUID = 9028708704636178559L;
 
 	private String reason;
