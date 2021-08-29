@@ -7,7 +7,7 @@
 ![GitHub forks](https://img.shields.io/github/forks/masecla22/Reddit4J?style=for-the-badge)
 ![GitHub Repo stars](https://img.shields.io/github/stars/masecla22/Reddit4J?style=for-the-badge)
 
-![Reddit4J Logo](https://github.com/masecla22/Reddit4J/blob/master/assets/logo/logo.png)
+![Reddit4J Logo](https://raw.githubusercontent.com/masecla22/Reddit4J/master/assets/logo/logo.png)
 
 
 <p align="center">
