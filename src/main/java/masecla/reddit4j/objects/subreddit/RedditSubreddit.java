@@ -141,7 +141,7 @@ public class RedditSubreddit extends RedditThing {
 		return builder.create();
 	}
 
-	public SubredditSettings getSettings() throws IOException, InterruptedException, PermissionException {
+	public SubredditSettings getSettings() throws IOException, InterruptedException {
 		Connection conn = client.useEndpoint("/" + display_name_prefixed + "/about/edit");
 		conn.ignoreHttpErrors(true);
 		Response rsp = client.getHttpClient().execute(conn);
@@ -248,11 +248,11 @@ public class RedditSubreddit extends RedditThing {
 						SubredditEmoji.class);
 				currentEmoji.setSnoomoji(snoomojis);
 				currentEmoji.setName(currentName);
+				currentEmoji.setSubreddit(this);
 
 				subredditEmojis.add(currentEmoji);
 			}
 		}
-
 		return subredditEmojis;
 	}
 
