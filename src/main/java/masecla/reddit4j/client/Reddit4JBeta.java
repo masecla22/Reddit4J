@@ -52,6 +52,8 @@ public class Reddit4JBeta {
 
 		result.add("/api/v1/subreddit/emojis/all");
 		result.add("/api/v1/subreddit/emoji_custom_size");
+		result.add("/api/v1/subreddit/emoji_custom_size");
+		result.add("/api/v1/subreddit/emoji/emoji_name");
 
 		result.add("/r/subreddit/about");
 		result.add("/r/subreddit/about/edit");
