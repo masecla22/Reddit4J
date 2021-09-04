@@ -1,5 +1,5 @@
 ![JitPack](https://img.shields.io/jitpack/v/github/masecla22/Reddit4J?style=for-the-badge)
-![Discord](https://img.shields.io/discord/459964296143699970?style=for-the-badge)
+![Discord](https://img.shields.io/discord/881520515792134246?style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/masecla22/Reddit4J?style=for-the-badge)
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/masecla22?style=for-the-badge)
 ![GitHub forks](https://img.shields.io/github/forks/masecla22/Reddit4J?style=for-the-badge)
