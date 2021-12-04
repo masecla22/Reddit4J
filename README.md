@@ -12,7 +12,7 @@
   A well documented Java library looking for 100% coverage of the Reddit API
 </p>
 
-# Reddit4J - The ideea behind it
+# Reddit4J - The idea behind it
 Reddit4J was started when I was looking for a wrapper around the Reddit API and was only able to find a very limited number of solutions, most of them either with very poor documentation, or with incomplete coverage and very out of date.
 
 # Adding Reddit4J as a dependency
