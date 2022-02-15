@@ -44,7 +44,7 @@ allprojects {
 ```
 ``` kotlin
 dependencies {
-        implementation 'com.github.masecla22:Reddit4J:Tag'
+        implementation 'com.github.masecla22:Reddit4J:master-SNAPSHOT'
 }
 ```
 
