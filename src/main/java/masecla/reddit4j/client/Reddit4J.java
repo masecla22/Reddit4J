@@ -267,7 +267,7 @@ public class Reddit4J {
     }
 
     public Reddit4J setUserAgent(UserAgentBuilder userAgent) {
-        this.userAgent = userAgent.toString();
+        this.userAgent = userAgent.build();
         return this;
     }
 
