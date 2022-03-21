@@ -340,7 +340,9 @@ public class Reddit4J {
             String[] newMethods = methodsSet.toArray(new String[0]);
 
             methodsField.set(null, newMethods);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch(NoSuchFieldException e) {
+        	// we're just on an unsupported platform.
+        } catch (IllegalAccessException e) {
             throw new IllegalStateException(e);
         }
     }
