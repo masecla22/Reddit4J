@@ -3,10 +3,15 @@ package masecla.reddit4j.objects.subreddit;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.google.gson.reflect.TypeToken;
+import masecla.reddit4j.objects.RedditData;
+import masecla.reddit4j.objects.RedditPost;
+import masecla.reddit4j.requests.ListingEndpointRequest;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
@@ -254,6 +259,11 @@ public class RedditSubreddit extends RedditThing {
 			}
 		}
 		return subredditEmojis;
+	}
+
+	public ListingEndpointRequest<RedditData<RedditPost>> getHot() {
+		Type type = TypeToken.getParameterized(RedditData.class, RedditPost.class).getType();
+		return new ListingEndpointRequest<>("/r/" + this.display_name + "/hot", this.client, type);
 	}
 
 	public void setClient(Reddit4J client) {

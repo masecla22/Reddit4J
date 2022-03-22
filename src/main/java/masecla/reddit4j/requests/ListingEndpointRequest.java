@@ -1,15 +1,16 @@
 package masecla.reddit4j.requests;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.lang.reflect.Type;
 import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
+import masecla.reddit4j.objects.RedditData;
+import masecla.reddit4j.objects.RedditListing;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Response;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
 
 import masecla.reddit4j.client.Reddit4J;
 import masecla.reddit4j.exceptions.AuthenticationException;
@@ -19,12 +20,20 @@ public class ListingEndpointRequest<T extends RedditThing> {
 	private String endpointPath;
 	private Reddit4J client;
 	private Class<T> clazz;
+	private Type type;
 
 	public ListingEndpointRequest(String endpointPath, Reddit4J client, Class<T> clazz) {
 		super();
 		this.endpointPath = endpointPath;
 		this.client = client;
 		this.clazz = clazz;
+	}
+
+	public ListingEndpointRequest(String endpointPath, Reddit4J client, Type type) {
+		super();
+		this.endpointPath = endpointPath;
+		this.client = client;
+		this.type = type;
 	}
 
 	private int count = 0;
@@ -55,16 +64,15 @@ public class ListingEndpointRequest<T extends RedditThing> {
 			conn.data("show", "all");
 
 		Response rsp = conn.execute();
-		JsonArray array = JsonParser.parseString(preprocess(rsp.body())).getAsJsonObject().getAsJsonObject("data")
-				.getAsJsonArray("children");
+
+		TypeToken<?> ttListing = TypeToken.getParameterized(RedditListing.class, (clazz != null ? clazz : type));
+		TypeToken<?> ttData = TypeToken.getParameterized(RedditData.class, ttListing.getType());
+
 		Gson gson = new Gson();
 
-		List<T> result = new ArrayList<>();
-		array.forEach(c -> {
-			T value = gson.fromJson(c.getAsJsonObject(), clazz);
-			result.add(value);
-		});
-		return result;
+		RedditData<RedditListing<T>> fromJson = gson.fromJson(rsp.body(), ttData.getType());
+
+		return fromJson.getData().getChildren();
 	}
 
 	public ListingEndpointRequest<T> after(T after) {
