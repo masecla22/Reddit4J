@@ -262,9 +262,30 @@ public class RedditSubreddit extends RedditThing {
 		return subredditEmojis;
 	}
 
+	/**
+	 * https://www.reddit.com/dev/api/#GET_hot
+	 */
 	public ListingEndpointRequest<RedditPost> getHot() {
+		return getRequest("/hot");
+	}
+
+	/**
+	 * https://www.reddit.com/dev/api/#GET_new
+	 */
+	public ListingEndpointRequest<RedditPost> getNew() {
+		return getRequest("/new");
+	}
+
+	/**
+	 * https://www.reddit.com/dev/api/#GET_rising
+	 */
+	public ListingEndpointRequest<RedditPost> getRising() {
+		return getRequest("/rising");
+	}
+
+	private SubredditPostListingEndpointRequest getRequest(String endpoint) {
 		Type type = TypeToken.getParameterized(RedditData.class, RedditPost.class).getType();
-		return new SubredditPostListingEndpointRequest<>("/r/" + this.display_name + "/hot", this.client, type);
+		return new SubredditPostListingEndpointRequest("/r/" + this.display_name + endpoint, this.client, type);
 	}
 
 	public void setClient(Reddit4J client) {

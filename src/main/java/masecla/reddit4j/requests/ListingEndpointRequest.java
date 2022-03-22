@@ -30,8 +30,8 @@ public class ListingEndpointRequest<T extends RedditThing> {
 	protected int count = 0;
 	protected int limit = 25;
 	protected boolean show = false;
-	protected T before = null;
-	protected T after = null;
+	protected String before = null;
+	protected String after = null;
 
 	public String preprocess(String body) {
 		return body;
@@ -39,20 +39,7 @@ public class ListingEndpointRequest<T extends RedditThing> {
 
 	public List<T> submit() throws IOException, InterruptedException, AuthenticationException {
 		client.ensureConnection();
-		Connection conn = client.useEndpoint(endpointPath);
-
-		if (after != null)
-			conn.data("after", after.getId());
-		else
-			conn.data("after", "null");
-		if (before != null)
-			conn.data("before", after.getId());
-		if (count != 0)
-			conn.data("count", count + "");
-		conn.data("limit", limit + "");
-
-		if (show)
-			conn.data("show", "all");
+		Connection conn = createConnection();
 
 		Response rsp = conn.execute();
 		JsonArray array = JsonParser.parseString(preprocess(rsp.body())).getAsJsonObject().getAsJsonObject("data")
@@ -68,11 +55,23 @@ public class ListingEndpointRequest<T extends RedditThing> {
 	}
 
 	public ListingEndpointRequest<T> after(T after) {
+		this.after = (after == null) ? null : after.getId();
+		return this;
+	}
+
+
+	public ListingEndpointRequest<T> after(String after) {
 		this.after = after;
 		return this;
 	}
 
 	public ListingEndpointRequest<T> before(T before) {
+		this.before = (before == null) ? null : before.getId();
+		return this;
+	}
+
+
+	public ListingEndpointRequest<T> before(String before) {
 		this.before = before;
 		return this;
 	}
@@ -92,5 +91,23 @@ public class ListingEndpointRequest<T extends RedditThing> {
 	public ListingEndpointRequest<T> show(boolean show) {
 		this.show = show;
 		return this;
+	}
+
+	protected Connection createConnection() {
+		Connection conn = client.useEndpoint(endpointPath);
+
+		if (after != null)
+			conn.data("after", after);
+		else
+			conn.data("after", "null");
+		if (before != null)
+			conn.data("before", after);
+		if (count != 0)
+			conn.data("count", count + "");
+		conn.data("limit", limit + "");
+
+		if (show)
+			conn.data("show", "all");
+		return conn;
 	}
 }

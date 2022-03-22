@@ -7,7 +7,6 @@ import masecla.reddit4j.exceptions.AuthenticationException;
 import masecla.reddit4j.objects.RedditData;
 import masecla.reddit4j.objects.RedditListing;
 import masecla.reddit4j.objects.RedditPost;
-import masecla.reddit4j.objects.RedditThing;
 import org.jsoup.Connection;
 
 import java.io.IOException;
@@ -15,7 +14,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SubredditPostListingEndpointRequest<T extends RedditThing> extends ListingEndpointRequest<RedditPost> {
+public class SubredditPostListingEndpointRequest extends ListingEndpointRequest<RedditPost> {
     private Type type;
 
     public SubredditPostListingEndpointRequest(String endpointPath, Reddit4J client, Class<RedditPost> clazz) {
@@ -30,20 +29,7 @@ public class SubredditPostListingEndpointRequest<T extends RedditThing> extends 
     @Override
     public List<RedditPost> submit() throws IOException, InterruptedException, AuthenticationException {
         client.ensureConnection();
-        Connection conn = client.useEndpoint(endpointPath);
-
-        if (after != null)
-            conn.data("after", after.getId());
-        else
-            conn.data("after", "null");
-        if (before != null)
-            conn.data("before", after.getId());
-        if (count != 0)
-            conn.data("count", count + "");
-        conn.data("limit", limit + "");
-
-        if (show)
-            conn.data("show", "all");
+        Connection conn = createConnection();
 
         Connection.Response rsp = conn.execute();
 
