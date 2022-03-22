@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import masecla.reddit4j.objects.RedditData;
 import masecla.reddit4j.objects.RedditPost;
 import masecla.reddit4j.requests.ListingEndpointRequest;
+import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
@@ -261,9 +262,9 @@ public class RedditSubreddit extends RedditThing {
 		return subredditEmojis;
 	}
 
-	public ListingEndpointRequest<RedditData<RedditPost>> getHot() {
+	public ListingEndpointRequest<RedditPost> getHot() {
 		Type type = TypeToken.getParameterized(RedditData.class, RedditPost.class).getType();
-		return new ListingEndpointRequest<>("/r/" + this.display_name + "/hot", this.client, type);
+		return new SubredditPostListingEndpointRequest<>("/r/" + this.display_name + "/hot", this.client, type);
 	}
 
 	public void setClient(Reddit4J client) {
