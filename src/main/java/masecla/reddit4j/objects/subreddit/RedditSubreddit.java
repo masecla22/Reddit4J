@@ -11,7 +11,7 @@ import java.util.UUID;
 import com.google.gson.reflect.TypeToken;
 import masecla.reddit4j.objects.RedditData;
 import masecla.reddit4j.objects.RedditPost;
-import masecla.reddit4j.requests.ListingEndpointRequest;
+import masecla.reddit4j.objects.Sorting;
 import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
@@ -265,27 +265,53 @@ public class RedditSubreddit extends RedditThing {
 	/**
 	 * https://www.reddit.com/dev/api/#GET_hot
 	 */
-	public ListingEndpointRequest<RedditPost> getHot() {
-		return getRequest("/hot");
+	public SubredditPostListingEndpointRequest getHot() {
+		return getRequest(Sorting.HOT);
 	}
 
 	/**
 	 * https://www.reddit.com/dev/api/#GET_new
 	 */
-	public ListingEndpointRequest<RedditPost> getNew() {
-		return getRequest("/new");
+	public SubredditPostListingEndpointRequest getNew() {
+		return getRequest(Sorting.NEW);
 	}
 
 	/**
 	 * https://www.reddit.com/dev/api/#GET_rising
 	 */
-	public ListingEndpointRequest<RedditPost> getRising() {
-		return getRequest("/rising");
+	public SubredditPostListingEndpointRequest getRising() {
+		return getRequest(Sorting.RISING);
 	}
 
-	private SubredditPostListingEndpointRequest getRequest(String endpoint) {
+	/**
+	 *
+	 */
+	public SubredditPostListingEndpointRequest getTop() {
+		return getRequest(Sorting.TOP);
+	}
+
+	/**
+	 *
+	 */
+	public SubredditPostListingEndpointRequest getControversial() {
+		return getRequest(Sorting.CONTROVERSIAL);
+	}
+
+
+	/**
+	 * https://www.reddit.com/dev/api/#GET_{sort}
+	 */
+	private SubredditPostListingEndpointRequest getRequest(Sorting sorting) {
 		Type type = TypeToken.getParameterized(RedditData.class, RedditPost.class).getType();
-		return new SubredditPostListingEndpointRequest("/r/" + this.display_name + endpoint, this.client, type);
+		return new SubredditPostListingEndpointRequest("/r/" + this.display_name + "/" + sorting.getValue(), this.client, type);
+	}
+
+	public void subscribe() throws IOException, InterruptedException {
+		this.client.subscribe(this.display_name);
+	}
+
+	public void unsubscribe() throws IOException, InterruptedException {
+		this.client.unsubscribe(this.display_name);
 	}
 
 	public void setClient(Reddit4J client) {

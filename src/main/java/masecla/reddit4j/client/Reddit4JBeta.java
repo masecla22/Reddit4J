@@ -58,6 +58,10 @@ public class Reddit4JBeta {
 		result.add("/r/subreddit/about");
 		result.add("/r/subreddit/about/edit");
 
+		result.add("/api/del");
+		result.add("/api/subscribe");
+		result.add("/api/vote");
+
 		return result;
 	}
 

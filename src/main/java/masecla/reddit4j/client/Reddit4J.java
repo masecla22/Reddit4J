@@ -12,6 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import masecla.reddit4j.objects.*;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
@@ -25,10 +26,6 @@ import com.google.gson.JsonParser;
 import masecla.reddit4j.exceptions.AuthenticationException;
 import masecla.reddit4j.http.GenericHttpClient;
 import masecla.reddit4j.http.clients.RateLimitedClient;
-import masecla.reddit4j.objects.KarmaBreakdown;
-import masecla.reddit4j.objects.RedditProfile;
-import masecla.reddit4j.objects.RedditTrophy;
-import masecla.reddit4j.objects.RedditUser;
 import masecla.reddit4j.objects.preferences.RedditPreferences;
 import masecla.reddit4j.objects.subreddit.RedditSubreddit;
 import masecla.reddit4j.requests.ListingEndpointRequest;
@@ -228,10 +225,65 @@ public class Reddit4J {
         return properties;
     }
 
+    public void upvote(String fullNameId) throws IOException, InterruptedException {
+        vote(fullNameId, Vote.UP);
+    }
+
+    public void downvote(String fullNameId) throws IOException, InterruptedException {
+        vote(fullNameId, Vote.DOWN);
+    }
+
+    public void unvote(String fullNameId) throws IOException, InterruptedException {
+        vote(fullNameId, Vote.CLEAR);
+    }
+
+    /**
+     * Vote on a Votable thing.
+     * @param fullNameId The t1_ or t3_ full name of the thing to vote on
+     * @param vote UP, DOWN or CLEAR
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void vote(String fullNameId, Vote vote) throws IOException, InterruptedException {
+        Connection request = useEndpoint("/api/vote");
+        request.data("id", fullNameId);
+        request.data("dir", String.valueOf(vote.getValue()));
+        this.httpClient.execute(request);
+    }
+
+    public void delete(String fullNameId) throws IOException, InterruptedException {
+        Connection request = useEndpoint("/api/del");
+        request.data("id", fullNameId);
+        this.httpClient.execute(request);
+    }
+
     public static Reddit4J rateLimited() {
         Reddit4J result = new Reddit4J();
         result.httpClient = new RateLimitedClient();
         return result;
+    }
+
+    /**
+     * Subscribe to or unsubscribe from a subreddit.
+     *
+     * The user must have access to the subreddit to be able to subscribe to it.
+     *
+     * @param subreddit
+     */
+    public void subscribe(String subreddit) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/subscribe")
+                .method(Method.POST)
+                .data("action", "sub")
+                .data("sr_name", subreddit);
+        this.httpClient.execute(connection);
+    }
+
+    public void unsubscribe(String subreddit) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/subscribe")
+                .method(Method.POST)
+                .data("action", "unsub")
+                .data("sr_name", subreddit);
+        this.httpClient.execute(connection);
     }
 
     @Deprecated

@@ -7,6 +7,7 @@ import masecla.reddit4j.exceptions.AuthenticationException;
 import masecla.reddit4j.objects.RedditData;
 import masecla.reddit4j.objects.RedditListing;
 import masecla.reddit4j.objects.RedditPost;
+import masecla.reddit4j.objects.Time;
 import org.jsoup.Connection;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 public class SubredditPostListingEndpointRequest extends ListingEndpointRequest<RedditPost> {
     private Type type;
+    private Time time;
 
     public SubredditPostListingEndpointRequest(String endpointPath, Reddit4J client, Class<RedditPost> clazz) {
         super(endpointPath, client, clazz);
@@ -40,7 +42,60 @@ public class SubredditPostListingEndpointRequest extends ListingEndpointRequest<
 
         RedditData<RedditListing<RedditData<RedditPost>>> fromJson = gson.fromJson(rsp.body(), ttData.getType());
 
-        return fromJson.getData().getChildren().stream().map(RedditData::getData).collect(Collectors.toList());
+        return fromJson.getData().getChildren().stream()
+                .map(RedditData::getData)
+                .peek(redditPost -> redditPost.setClient(this.client))
+                .collect(Collectors.toList());
     }
 
+    @Override
+    protected Connection createConnection() {
+        Connection conn = super.createConnection();
+
+        if (this.time != null) {
+            conn.data("t", this.time.getValue());
+        }
+
+        return conn;
+    }
+
+    @Override
+    public SubredditPostListingEndpointRequest after(RedditPost after) {
+        return (SubredditPostListingEndpointRequest) super.after(after);
+    }
+
+    @Override
+    public SubredditPostListingEndpointRequest after(String after) {
+        return (SubredditPostListingEndpointRequest) super.after(after);
+    }
+
+    @Override
+    public SubredditPostListingEndpointRequest before(RedditPost before) {
+        return (SubredditPostListingEndpointRequest) super.before(before);
+    }
+
+    @Override
+    public SubredditPostListingEndpointRequest before(String before) {
+        return (SubredditPostListingEndpointRequest) super.before(before);
+    }
+
+    @Override
+    public SubredditPostListingEndpointRequest count(int count) {
+        return (SubredditPostListingEndpointRequest) super.count(count);
+    }
+
+    @Override
+    public SubredditPostListingEndpointRequest limit(int limit) {
+        return (SubredditPostListingEndpointRequest) super.limit(limit);
+    }
+
+    @Override
+    public SubredditPostListingEndpointRequest show(boolean show) {
+        return (SubredditPostListingEndpointRequest) super.show(show);
+    }
+
+    public SubredditPostListingEndpointRequest time(Time time) {
+        this.time = time;
+        return this;
+    }
 }
