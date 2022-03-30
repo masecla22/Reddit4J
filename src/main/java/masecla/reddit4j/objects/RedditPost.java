@@ -213,6 +213,56 @@ public class RedditPost extends RedditThing implements RedditPostActions {
         this.client.delete(this.name);
     }
 
+    @Override
+    public void hide() throws IOException, InterruptedException {
+        this.client.hide(this.name);
+    }
+
+    @Override
+    public void unhide() throws IOException, InterruptedException {
+        this.client.unhide(this.name);
+    }
+
+    @Override
+    public void lock() throws IOException, InterruptedException {
+        this.client.lock(this.name);
+    }
+
+    @Override
+    public void unlock() throws IOException, InterruptedException {
+        this.client.unlock(this.name);
+    }
+
+    @Override
+    public void marknsfw() throws IOException, InterruptedException {
+        this.client.marknsfw(this.name);
+    }
+
+    @Override
+    public void unmarknsfw() throws IOException, InterruptedException {
+        this.client.unmarknsfw(this.name);
+    }
+
+    @Override
+    public void save(String category) throws IOException, InterruptedException {
+        this.client.save(category, this.name);
+    }
+
+    @Override
+    public void unsave() throws IOException, InterruptedException {
+        this.client.unsave(this.name);
+    }
+
+    @Override
+    public void spoiler() throws IOException, InterruptedException {
+        this.client.spoiler(this.name);
+    }
+
+    @Override
+    public void unspoiler() throws IOException, InterruptedException {
+        this.client.unspoiler(this.name);
+    }
+
     public void setClient(Reddit4J client) {
         this.client = client;
     }

@@ -61,6 +61,16 @@ public class Reddit4JBeta {
 		result.add("/api/del");
 		result.add("/api/subscribe");
 		result.add("/api/vote");
+		result.add("/api/hide");
+		result.add("/api/unhide");
+		result.add("/api/lock");
+		result.add("/api/unlock");
+		result.add("/api/marknsfw");
+		result.add("/api/unmarknsfw");
+		result.add("/api/save");
+		result.add("/api/unsave");
+		result.add("/api/spoiler");
+		result.add("/api/unspoiler");
 
 		return result;
 	}

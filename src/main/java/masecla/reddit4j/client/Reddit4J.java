@@ -257,6 +257,141 @@ public class Reddit4J {
         this.httpClient.execute(request);
     }
 
+    /**
+     * Hide a link.
+     * This removes it from the user's default view of subreddit listings.
+     * @param ids Fullnames
+     * @see #unhide(String...)
+     */
+    public void hide(String... ids) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/hide")
+                .method(Method.POST)
+                .data("id", String.join(",", ids));
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Unhide a link.
+     * @param ids Fullnames
+     * @see #hide(String...)
+     */
+    public void unhide(String... ids) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/unhide")
+                .method(Method.POST)
+                .data("id", String.join(",", ids));
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Lock a link or comment.
+     * Prevents a post or new child comments from receiving new comments.
+     * @param id fullname of the thing
+     * @see #unlock(String)
+     */
+    public void lock(String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/lock")
+                .method(Method.POST)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Unlock a link or comment.
+     * Allow a post or comment to receive new comments.
+     * @param id fullname of the thing
+     * @see #lock(String)
+     */
+    public void unlock(String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/unlock")
+                .method(Method.POST)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Mark a link NSFW.
+     * @param id fullname of a thing
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void marknsfw(String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/marknsfw")
+                .method(Method.POST)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Remove the NSFW marking from a link.
+     * @param id fullname of a thing
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void unmarknsfw(String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/unmarknsfw")
+                .method(Method.POST)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Save a link or comment.
+     * Saved things are kept in the user's saved listing for later perusal.
+     * @param category a category name
+     * @param id fullname of a thing
+     * @see #unsave(String)
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void save(String category, String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/save")
+                .method(Method.POST)
+                .data("category", category)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Unsave a link or comment.
+     * This removes the thing from the user's saved listings as well.
+     * @param id fullname of a thing
+     * @see #save(String)
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void unsave(String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/unsave")
+                .method(Method.POST)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Spoiler a link
+     * @param id fullname of a link
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void spoiler(String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/spoiler")
+                .method(Method.POST)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Unspoiler a link
+     * @param id fullname of a link
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void unspoiler(String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/unspoiler")
+                .method(Method.POST)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
     public static Reddit4J rateLimited() {
         Reddit4J result = new Reddit4J();
         result.httpClient = new RateLimitedClient();
@@ -264,10 +399,8 @@ public class Reddit4J {
     }
 
     /**
-     * Subscribe to or unsubscribe from a subreddit.
-     *
+     * Subscribe to a subreddit.
      * The user must have access to the subreddit to be able to subscribe to it.
-     *
      * @param subreddit
      */
     public void subscribe(String subreddit) throws IOException, InterruptedException {
@@ -278,6 +411,10 @@ public class Reddit4J {
         this.httpClient.execute(connection);
     }
 
+    /**
+     * Unsubscribe from a subreddit.
+     * @param subreddit
+     */
     public void unsubscribe(String subreddit) throws IOException, InterruptedException {
         Connection connection = useEndpoint("/api/subscribe")
                 .method(Method.POST)

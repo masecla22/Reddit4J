@@ -29,26 +29,20 @@ public interface RedditPostActions {
 
     /**
      * Hide a link.
-     *
      * This removes it from the user's default view of subreddit listings.
      * @see #unhide()
      */
-    //default void hide() {};
+    void hide() throws IOException, InterruptedException;
 
     /**
      * Unhide a link.
-     *
      * @see #hide()
      */
-    //default void unhide() {};
+    void unhide() throws IOException, InterruptedException;
+
     //default void remove() {};
     //default void approve() {};
     //default void distinguish() {};
-
-    /**
-     *
-     */
-    //default void lock() {};
 
     /**
      * Unlock a link or comment.
@@ -57,7 +51,16 @@ public interface RedditPostActions {
      *
      * See also: /api/lock.
      */
-    //default void unlock() {};
+    void lock() throws IOException, InterruptedException;
+
+    /**
+     * Unlock a link or comment.
+     *
+     * Allow a post or comment to receive new comments.
+     *
+     * See also: /api/lock.
+     */
+    void unlock() throws IOException, InterruptedException;
 
 
     /**
@@ -65,14 +68,14 @@ public interface RedditPostActions {
      *
      * See also: /api/unmarknsfw.
      */
-    //default void marknsfw() {};
+    void marknsfw() throws IOException, InterruptedException;
 
     /**
      * Remove the NSFW marking from a link.
      *
      * See also: /api/marknsfw.
      */
-    //default void unmarknsfw() {};
+    void unmarknsfw() throws IOException, InterruptedException;
 
     /**
      * Save a link or comment.
@@ -81,7 +84,7 @@ public interface RedditPostActions {
      *
      * See also: /api/unsave.
      */
-    //default void save(String category) {};
+    void save(String category) throws IOException, InterruptedException;
 
     /**
      * Unsave a link or comment.
@@ -90,11 +93,11 @@ public interface RedditPostActions {
      *
      * See also: /api/save.
      */
-    //default void unsave() {};
+    void unsave() throws IOException, InterruptedException;
 
 
-    //default void spoiler() {};
-    //default void unspoiler() {};
+    void spoiler() throws IOException, InterruptedException;
+    void unspoiler() throws IOException, InterruptedException;
 
     /**
      * Report a link, comment or message. Reporting a thing brings it to the attention of the subreddit's moderators. Reporting a message sends it to a system for admin review. For links and comments, the thing is implicitly hidden as well (see /api/hide for details).

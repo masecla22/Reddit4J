@@ -306,10 +306,16 @@ public class RedditSubreddit extends RedditThing {
 		return new SubredditPostListingEndpointRequest("/r/" + this.display_name + "/" + sorting.getValue(), this.client, type);
 	}
 
+	/**
+	 * Subscribe to the subreddit
+	 */
 	public void subscribe() throws IOException, InterruptedException {
 		this.client.subscribe(this.display_name);
 	}
 
+	/**
+	 * Unsubscribe to the subreddit
+	 */
 	public void unsubscribe() throws IOException, InterruptedException {
 		this.client.unsubscribe(this.display_name);
 	}
