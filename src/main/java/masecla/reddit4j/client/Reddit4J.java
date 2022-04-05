@@ -3,6 +3,7 @@ package masecla.reddit4j.client;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -12,7 +13,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gson.reflect.TypeToken;
 import masecla.reddit4j.objects.*;
+import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
@@ -355,7 +358,7 @@ public class Reddit4J {
      * Unsave a link or comment.
      * This removes the thing from the user's saved listings as well.
      * @param id fullname of a thing
-     * @see #save(String)
+     * @see #save(String, String)
      * @throws IOException
      * @throws InterruptedException
      */
@@ -421,6 +424,21 @@ public class Reddit4J {
                 .data("action", "unsub")
                 .data("sr_name", subreddit);
         this.httpClient.execute(connection);
+    }
+
+    public SubredditPostListingEndpointRequest getSubredditPosts(String subreddit, Sorting sorting) {
+        Type type = TypeToken.getParameterized(RedditData.class, RedditPost.class).getType();
+        return new SubredditPostListingEndpointRequest("/r/" + subreddit + "/" + sorting.getValue(), this, type);
+    }
+
+    public RedditUser getUser(String username) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/user/" + username + "/about").method(Method.GET);
+        Response response = this.httpClient.execute(connection);
+        return new Gson().fromJson(response.body(), RedditUser.class);
+    }
+
+    public ListingEndpointRequest<RedditPost> getUserSubmitted(String username) throws IOException, InterruptedException {
+        return new ListingEndpointRequest<>("/user/" + username + "/submitted", this, RedditPost.class);
     }
 
     @Deprecated
@@ -542,5 +560,4 @@ public class Reddit4J {
     public ClientType getClientType() {
         return clientType;
     }
-
 }

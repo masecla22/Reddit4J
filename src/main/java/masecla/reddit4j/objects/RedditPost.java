@@ -1,5 +1,6 @@
 package masecla.reddit4j.objects;
 
+import lombok.Data;
 import masecla.reddit4j.client.Reddit4J;
 
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.util.List;
 /**
  * T3
  */
+@Data
 public class RedditPost extends RedditThing implements RedditPostActions {
 
     Reddit4J client;

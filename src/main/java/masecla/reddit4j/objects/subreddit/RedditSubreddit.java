@@ -3,15 +3,11 @@ package masecla.reddit4j.objects.subreddit;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.google.gson.reflect.TypeToken;
 import lombok.Data;
-import masecla.reddit4j.objects.RedditData;
-import masecla.reddit4j.objects.RedditPost;
 import masecla.reddit4j.objects.Sorting;
 import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
 import org.jsoup.Connection;
@@ -268,44 +264,43 @@ public class RedditSubreddit extends RedditThing {
 	 * https://www.reddit.com/dev/api/#GET_hot
 	 */
 	public SubredditPostListingEndpointRequest getHot() {
-		return getRequest(Sorting.HOT);
+		return getListing(Sorting.HOT);
 	}
 
 	/**
 	 * https://www.reddit.com/dev/api/#GET_new
 	 */
 	public SubredditPostListingEndpointRequest getNew() {
-		return getRequest(Sorting.NEW);
+		return getListing(Sorting.NEW);
 	}
 
 	/**
 	 * https://www.reddit.com/dev/api/#GET_rising
 	 */
 	public SubredditPostListingEndpointRequest getRising() {
-		return getRequest(Sorting.RISING);
+		return getListing(Sorting.RISING);
 	}
 
 	/**
 	 *
 	 */
 	public SubredditPostListingEndpointRequest getTop() {
-		return getRequest(Sorting.TOP);
+		return getListing(Sorting.TOP);
 	}
 
 	/**
 	 *
 	 */
 	public SubredditPostListingEndpointRequest getControversial() {
-		return getRequest(Sorting.CONTROVERSIAL);
+		return getListing(Sorting.CONTROVERSIAL);
 	}
 
 
 	/**
 	 * https://www.reddit.com/dev/api/#GET_{sort}
 	 */
-	private SubredditPostListingEndpointRequest getRequest(Sorting sorting) {
-		Type type = TypeToken.getParameterized(RedditData.class, RedditPost.class).getType();
-		return new SubredditPostListingEndpointRequest("/r/" + this.display_name + "/" + sorting.getValue(), this.client, type);
+	public SubredditPostListingEndpointRequest getListing(Sorting sorting) {
+		return this.client.getSubredditPosts(this.display_name, sorting);
 	}
 
 	/**
