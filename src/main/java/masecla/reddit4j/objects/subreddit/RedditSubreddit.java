@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.google.gson.reflect.TypeToken;
+import lombok.Data;
 import masecla.reddit4j.objects.RedditData;
 import masecla.reddit4j.objects.RedditPost;
 import masecla.reddit4j.objects.Sorting;
@@ -31,6 +32,7 @@ import masecla.reddit4j.objects.adapters.DimensionAdapter;
 import masecla.reddit4j.objects.preferences.enums.Language;
 import masecla.reddit4j.requests.CollectionCreationRequest;
 
+@Data
 public class RedditSubreddit extends RedditThing {
 	private boolean accept_followers;
 	private int accounts_active;

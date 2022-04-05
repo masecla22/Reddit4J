@@ -1,7 +1,10 @@
 package masecla.reddit4j.objects;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class RedditComment extends RedditThing {
     /**
      * who approved this comment. null if nobody or you are not a mod

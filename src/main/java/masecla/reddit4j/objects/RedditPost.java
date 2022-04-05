@@ -141,6 +141,7 @@ public class RedditPost extends RedditThing implements RedditPostActions {
 
     /**
      * Indicates if link has been edited. Will be the edit timestamp if the link has been edited and return false otherwise. https://github.com/reddit/reddit/issues/581
+     * TODO: The API can return a long or a boolean, needs custom deserialization to handle it
      */
     //long edited;
 
