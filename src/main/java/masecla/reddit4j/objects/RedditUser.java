@@ -1,9 +1,7 @@
 package masecla.reddit4j.objects;
 
 import masecla.reddit4j.client.Reddit4J;
-import masecla.reddit4j.requests.ListingEndpointRequest;
-
-import java.io.IOException;
+import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
 
 public class RedditUser extends RedditThing implements RedditUserActions {
 	private Reddit4J client;
@@ -19,7 +17,7 @@ public class RedditUser extends RedditThing implements RedditUserActions {
 	}
 
 	@Override
-	public ListingEndpointRequest<RedditPost> submitted() throws IOException, InterruptedException {
+	public SubredditPostListingEndpointRequest submitted() {
 		return this.client.getUserSubmitted(this.name);
 	}
 

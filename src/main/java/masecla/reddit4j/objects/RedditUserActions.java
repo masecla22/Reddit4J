@@ -1,9 +1,9 @@
 package masecla.reddit4j.objects;
 
-import masecla.reddit4j.requests.ListingEndpointRequest;
+import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
 
 import java.io.IOException;
 
 public interface RedditUserActions {
-    ListingEndpointRequest<RedditPost> submitted() throws IOException, InterruptedException;
+    SubredditPostListingEndpointRequest submitted() throws IOException, InterruptedException;
 }

@@ -3,7 +3,6 @@ package masecla.reddit4j.client;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gson.reflect.TypeToken;
 import masecla.reddit4j.objects.*;
 import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
 import org.jsoup.Connection;
@@ -31,7 +29,7 @@ import masecla.reddit4j.http.GenericHttpClient;
 import masecla.reddit4j.http.clients.RateLimitedClient;
 import masecla.reddit4j.objects.preferences.RedditPreferences;
 import masecla.reddit4j.objects.subreddit.RedditSubreddit;
-import masecla.reddit4j.requests.ListingEndpointRequest;
+import masecla.reddit4j.requests.RedditUserListingEndpointRequest;
 import masecla.reddit4j.requests.RedditPreferencesUpdateRequest;
 
 public class Reddit4J {
@@ -161,12 +159,12 @@ public class Reddit4J {
         return new RedditPreferencesUpdateRequest(this);
     }
 
-    public ListingEndpointRequest<RedditUser> getBlocked() {
-        return new ListingEndpointRequest<>("/prefs/blocked", this, RedditUser.class);
+    public RedditUserListingEndpointRequest getBlocked() {
+        return new RedditUserListingEndpointRequest("/prefs/blocked", this);
     }
 
-    public ListingEndpointRequest<RedditUser> getMessaging() {
-        return new ListingEndpointRequest<RedditUser>("/prefs/messaging", this, RedditUser.class) {
+    public RedditUserListingEndpointRequest getMessaging() {
+        return new RedditUserListingEndpointRequest("/prefs/messaging", this) {
             @Override
             public String preprocess(String body) {
                 JsonArray array = JsonParser.parseString(body).getAsJsonArray();
@@ -175,8 +173,8 @@ public class Reddit4J {
         };
     }
 
-    public ListingEndpointRequest<RedditUser> getTrusted() {
-        return new ListingEndpointRequest<>("/prefs/trusted", this, RedditUser.class);
+    public RedditUserListingEndpointRequest getTrusted() {
+        return new RedditUserListingEndpointRequest("/prefs/trusted", this);
     }
 
     public RedditSubreddit getSubreddit(String name) throws IOException, InterruptedException {
@@ -196,8 +194,8 @@ public class Reddit4J {
         return result;
     }
 
-    public ListingEndpointRequest<RedditUser> getFriends() {
-        return new ListingEndpointRequest<RedditUser>("/prefs/friends", this, RedditUser.class) {
+    public RedditUserListingEndpointRequest getFriends() {
+        return new RedditUserListingEndpointRequest("/prefs/friends", this) {
             @Override
             public String preprocess(String body) {
                 JsonArray array = JsonParser.parseString(body).getAsJsonArray();
@@ -427,8 +425,7 @@ public class Reddit4J {
     }
 
     public SubredditPostListingEndpointRequest getSubredditPosts(String subreddit, Sorting sorting) {
-        Type type = TypeToken.getParameterized(RedditData.class, RedditPost.class).getType();
-        return new SubredditPostListingEndpointRequest("/r/" + subreddit + "/" + sorting.getValue(), this, type);
+        return new SubredditPostListingEndpointRequest("/r/" + subreddit + "/" + sorting.getValue(), this);
     }
 
     public RedditUser getUser(String username) throws IOException, InterruptedException {
@@ -437,8 +434,8 @@ public class Reddit4J {
         return new Gson().fromJson(response.body(), RedditUser.class);
     }
 
-    public ListingEndpointRequest<RedditPost> getUserSubmitted(String username) throws IOException, InterruptedException {
-        return new ListingEndpointRequest<>("/user/" + username + "/submitted", this, RedditPost.class);
+    public SubredditPostListingEndpointRequest getUserSubmitted(String username) {
+        return new SubredditPostListingEndpointRequest("/user/" + username + "/submitted", this);
     }
 
     @Deprecated

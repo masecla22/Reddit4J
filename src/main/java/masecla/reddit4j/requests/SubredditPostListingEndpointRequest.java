@@ -11,21 +11,14 @@ import masecla.reddit4j.objects.Time;
 import org.jsoup.Connection;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SubredditPostListingEndpointRequest extends ListingEndpointRequest<RedditPost> {
-    private Type type;
+public class SubredditPostListingEndpointRequest extends AbstractListingEndpointRequest<RedditPost, SubredditPostListingEndpointRequest> {
     private Time time;
 
-    public SubredditPostListingEndpointRequest(String endpointPath, Reddit4J client, Class<RedditPost> clazz) {
-        super(endpointPath, client, clazz);
-    }
-
-    public SubredditPostListingEndpointRequest(String endpointPath, Reddit4J client, Type type) {
-        super(endpointPath, client, null);
-        this.type = type;
+    public SubredditPostListingEndpointRequest(String endpointPath, Reddit4J client) {
+        super(endpointPath, client, null, SubredditPostListingEndpointRequest.class);
     }
 
     @Override
@@ -35,7 +28,8 @@ public class SubredditPostListingEndpointRequest extends ListingEndpointRequest<
 
         Connection.Response rsp = conn.execute();
 
-        TypeToken<?> ttListing = TypeToken.getParameterized(RedditListing.class, (clazz != null ? clazz : type));
+        TypeToken<?> ttPost = TypeToken.getParameterized(RedditData.class, RedditPost.class);
+        TypeToken<?> ttListing = TypeToken.getParameterized(RedditListing.class, ttPost.getType());
         TypeToken<?> ttData = TypeToken.getParameterized(RedditData.class, ttListing.getType());
 
         Gson gson = new Gson();
@@ -57,41 +51,6 @@ public class SubredditPostListingEndpointRequest extends ListingEndpointRequest<
         }
 
         return conn;
-    }
-
-    @Override
-    public SubredditPostListingEndpointRequest after(RedditPost after) {
-        return (SubredditPostListingEndpointRequest) super.after(after);
-    }
-
-    @Override
-    public SubredditPostListingEndpointRequest after(String after) {
-        return (SubredditPostListingEndpointRequest) super.after(after);
-    }
-
-    @Override
-    public SubredditPostListingEndpointRequest before(RedditPost before) {
-        return (SubredditPostListingEndpointRequest) super.before(before);
-    }
-
-    @Override
-    public SubredditPostListingEndpointRequest before(String before) {
-        return (SubredditPostListingEndpointRequest) super.before(before);
-    }
-
-    @Override
-    public SubredditPostListingEndpointRequest count(int count) {
-        return (SubredditPostListingEndpointRequest) super.count(count);
-    }
-
-    @Override
-    public SubredditPostListingEndpointRequest limit(int limit) {
-        return (SubredditPostListingEndpointRequest) super.limit(limit);
-    }
-
-    @Override
-    public SubredditPostListingEndpointRequest show(boolean show) {
-        return (SubredditPostListingEndpointRequest) super.show(show);
     }
 
     public SubredditPostListingEndpointRequest time(Time time) {
