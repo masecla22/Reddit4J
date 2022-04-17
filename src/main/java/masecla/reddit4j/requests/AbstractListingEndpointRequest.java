@@ -94,16 +94,16 @@ public abstract class AbstractListingEndpointRequest<T extends RedditThing, S ex
 
         if (after != null)
             conn.data("after", after);
-        else
-            conn.data("after", "null");
         if (before != null)
-            conn.data("before", after);
+            conn.data("before", before);
         if (count != 0)
             conn.data("count", count + "");
+
         conn.data("limit", limit + "");
 
         if (show)
             conn.data("show", "all");
+
         return conn;
     }
 }
