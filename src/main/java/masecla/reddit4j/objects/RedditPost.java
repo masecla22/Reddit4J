@@ -1,5 +1,6 @@
 package masecla.reddit4j.objects;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import masecla.reddit4j.client.Reddit4J;
 
@@ -24,12 +25,14 @@ public class RedditPost extends RedditThing implements RedditPostActions {
     /**
      * the CSS class of the author's flair. subreddit specific
      */
-    String author_flair_css_class;
+    @SerializedName("author_flair_css_class")
+	private String authorFlairCssClass;
 
     /**
      * the text of the author's flair. subreddit specific
      */
-    String author_flair_text;
+    @SerializedName("author_flair_text")
+	private String authorFlairText;
 
     /**
      * probably always returns false
@@ -49,7 +52,8 @@ public class RedditPost extends RedditThing implements RedditPostActions {
     /**
      * true if this link is a selfpost
      */
-    boolean is_self;
+    @SerializedName("is_self")
+	private boolean is_self;
 
     /**
      * how the logged-in user has voted on the link - True = upvoted, False = downvoted, null = no vote
@@ -59,12 +63,14 @@ public class RedditPost extends RedditThing implements RedditPostActions {
     /**
      * the CSS class of the link's flair.
      */
-    String link_flair_css_class;
+    @SerializedName("link_flair_css_class")
+	private String linkFlairCssClass;
 
     /**
      * the text of the link's flair.
      */
-    String link_flair_text;
+    @SerializedName("link_flair_text")
+	private String linkFlairText;
 
     /**
      * whether the link is locked (closed to new comments) or not.
@@ -79,17 +85,20 @@ public class RedditPost extends RedditThing implements RedditPostActions {
     /**
      * Used for streaming video. Technical embed specific information is found here.
      */
-    Object media_embed;
+    @SerializedName("media_embed")
+	private Object mediaEmbed;
 
     /**
      * the number of comments that belong to this link. includes removed comments.
      */
-    int num_comments;
+    @SerializedName("num_comments")
+	private int numComments;
 
     /**
      * true if the post is tagged as NSFW. False if otherwise
      */
-    boolean over_18;
+    @SerializedName("over_18")
+	private boolean over18;
 
     /**
      * relative URL of the permanent link for this link
@@ -114,7 +123,8 @@ public class RedditPost extends RedditThing implements RedditPostActions {
     /**
      * the formatted escaped HTML text. this is the HTML formatted version of the marked up text. Items that are boldened by ** or *** will now have <em> or *** tags on them. Additionally, bullets and numbered lists will now be in HTML list format. NOTE: The HTML string will be escaped. You must unescape to get the raw HTML. Null if not present.
      */
-    String selftext_html;
+    @SerializedName("selftext_html")
+	private String selftextHtml;
 
     /**
      * subreddit of thing excluding the /r/ prefix. "pics"
@@ -124,7 +134,8 @@ public class RedditPost extends RedditThing implements RedditPostActions {
     /**
      * the id of the subreddit in which the thing is located
      */
-    String subreddit_id;
+    @SerializedName("subreddit_id")
+	private String subredditId;
 
     /**
      * full URL to the thumbnail for this link; "self" if this is a self post; "image" if this is a link to an image but has no thumbnail; "default" if a thumbnail is not available
@@ -157,8 +168,9 @@ public class RedditPost extends RedditThing implements RedditPostActions {
      */
     boolean stickied;
 
+    @SerializedName("author_fullname")
+	private String authorFullname;
 
-    String author_fullname;
     String modReasonTitle;
     int gilded;
     List<Object> linkFlairRichtext;
@@ -199,7 +211,8 @@ public class RedditPost extends RedditThing implements RedditPostActions {
      *
      * https://github.com/reddit-archive/reddit/wiki/JSON#created-implementation
      */
-    long created_utc;
+    @SerializedName("created_utc")
+	private long createdUtc;
 
     @Override
     public void upvote() throws IOException, InterruptedException {
