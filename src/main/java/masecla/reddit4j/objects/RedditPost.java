@@ -8,19 +8,20 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * T3
+ * Reddit Post / Link
+ * AKA t3
  */
 @Data
 public class RedditPost extends RedditThing implements RedditPostActions {
 
-    Reddit4J client;
+    private Reddit4J client;
 
-    String name;
+    private String name;
 
     /**
      * the account name of the poster. null if this is a promotional link
      */
-    String author;
+    private String author;
 
     /**
      * the CSS class of the author's flair. subreddit specific
@@ -35,19 +36,19 @@ public class RedditPost extends RedditThing implements RedditPostActions {
 	private String authorFlairText;
 
     /**
-     * probably always returns false
+     * true if the current user has already clicked on this link.
      */
-    boolean clicked;
+    private boolean clicked;
 
     /**
      * the domain of this link. Self posts will be self.<subreddit> while other examples include en.wikipedia.org and s3.amazon.com
      */
-    String domain;
+    private String domain;
 
     /**
      * true if the post is hidden by the logged in user. false if not logged in or not hidden.
      */
-    boolean hidden;
+    private boolean hidden;
 
     /**
      * true if this link is a selfpost
@@ -58,7 +59,7 @@ public class RedditPost extends RedditThing implements RedditPostActions {
     /**
      * how the logged-in user has voted on the link - True = upvoted, False = downvoted, null = no vote
      */
-    Boolean likes;
+    private Boolean likes;
 
     /**
      * the CSS class of the link's flair.
@@ -75,12 +76,12 @@ public class RedditPost extends RedditThing implements RedditPostActions {
     /**
      * whether the link is locked (closed to new comments) or not.
      */
-    boolean locked;
+    private boolean locked;
 
     /**
      * Used for streaming video. Detailed information about the video and it's origins are placed here
      */
-    Object media;
+    private Object media;
 
     /**
      * Used for streaming video. Technical embed specific information is found here.
@@ -103,22 +104,22 @@ public class RedditPost extends RedditThing implements RedditPostActions {
     /**
      * relative URL of the permanent link for this link
      */
-    String permalink;
+    private String permalink;
 
     /**
      * true if this post is saved by the logged in user
      */
-    boolean saved;
+    private boolean saved;
 
     /**
      * the net-score of the link. note: A submission's score is simply the number of upvotes minus the number of downvotes. If five users like the submission and three users don't it will have a score of 2. Please note that the vote numbers are not "real" numbers, they have been "fuzzed" to prevent spam bots etc. So taking the above example, if five users upvoted the submission, and three users downvote it, the upvote/downvote numbers may say 23 upvotes and 21 downvotes, or 12 upvotes, and 10 downvotes. The points score is correct, but the vote totals are "fuzzed".
      */
-    int score;
+    private int score;
 
     /**
      * the raw text. this is the unformatted text which includes the raw markup characters such as ** for bold. <, >, and & are escaped. Empty if not present.
      */
-    String selftext;
+    private String selftext;
 
     /**
      * the formatted escaped HTML text. this is the HTML formatted version of the marked up text. Items that are boldened by ** or *** will now have <em> or *** tags on them. Additionally, bullets and numbered lists will now be in HTML list format. NOTE: The HTML string will be escaped. You must unescape to get the raw HTML. Null if not present.
@@ -129,7 +130,7 @@ public class RedditPost extends RedditThing implements RedditPostActions {
     /**
      * subreddit of thing excluding the /r/ prefix. "pics"
      */
-    String subreddit;
+    private String subreddit;
 
     /**
      * the id of the subreddit in which the thing is located
@@ -140,56 +141,56 @@ public class RedditPost extends RedditThing implements RedditPostActions {
     /**
      * full URL to the thumbnail for this link; "self" if this is a self post; "image" if this is a link to an image but has no thumbnail; "default" if a thumbnail is not available
      */
-    String thumbnail;
+    private String thumbnail;
 
     /**
      * the title of the link. may contain newlines for some reason
      */
-    String title;
+    private String title;
 
     /**
      * the link of this post. the permalink if this is a self-post
      */
-    String url;
+    private String url;
 
     /**
      * Indicates if link has been edited. Will be the edit timestamp if the link has been edited and return false otherwise. https://github.com/reddit/reddit/issues/581
      * TODO: The API can return a long or a boolean, needs custom deserialization to handle it
      */
-    //long edited;
+    //private long edited;
 
     /**
      * to allow determining whether they have been distinguished by moderators/admins. null = not distinguished. moderator = the green [M]. admin = the red [A]. special = various other special distinguishes http://bit.ly/ZYI47B
      */
-    String distinguished;
+    private String distinguished;
 
     /**
      * true if the post is set as the sticky in its subreddit.
      */
-    boolean stickied;
+    private boolean stickied;
 
     @SerializedName("author_fullname")
 	private String authorFullname;
 
-    String modReasonTitle;
-    int gilded;
-    List<Object> linkFlairRichtext;
-    String subredditNamePrefixed;
-    int pwls;
+    private String modReasonTitle;
+    private int gilded;
+    private List<Object> linkFlairRichtext;
+    private String subredditNamePrefixed;
+    private int pwls;
 
     /**
      * The number of upvotes. (includes own).
      *
      * https://github.com/reddit-archive/reddit/wiki/JSON#votable-implementation
      */
-    int ups;
+    private int ups;
 
     /**
      * The number of downvotes. (includes own).
      *
      * https://github.com/reddit-archive/reddit/wiki/JSON#votable-implementation
      */
-    int downs;
+    private int downs;
 
     /**
      * true if thing is liked by the user, false if thing is disliked, null if the user has not voted or you are not logged in.
@@ -197,14 +198,14 @@ public class RedditPost extends RedditThing implements RedditPostActions {
      *
      * https://github.com/reddit-archive/reddit/wiki/JSON#votable-implementation
      */
-    Boolean liked;
+    private Boolean liked;
 
     /**
      * The time of creation in local epoch-second format. ex: 1331042771.0
      *
      * https://github.com/reddit-archive/reddit/wiki/JSON#created-implementation
      */
-    long created;
+    private long created;
 
     /**
      * The time of creation in UTC epoch-second format. Note that neither of these ever have a non-zero fraction.
