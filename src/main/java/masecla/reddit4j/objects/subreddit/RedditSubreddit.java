@@ -101,10 +101,16 @@ public class RedditSubreddit extends RedditThing {
 	private boolean allowPredictions;
 
 	/**
+	 * Unknown.
+	 */
+	@SerializedName("allow_talks")
+	private boolean allowTalks;
+
+	/**
 	 * "Show up in high-traffic feeds. Allow your community to be in r/all, r/popular, and trending lists where it can be seen by the general Reddit population."
 	 */
 	@SerializedName("allow_top")
-	private boolean allowTop;
+	private Boolean allowTop;
 
 	@SerializedName("allow_predictions_tournament")
 	private boolean allowPredictionsTournament;
@@ -315,16 +321,18 @@ public class RedditSubreddit extends RedditThing {
 	/**
 	 * If crossposting is enabled.
 	 * "Allow crossposting of posts"
+	 * Null if user is not moderator.
 	 */
 	@SerializedName("is_crosspostable_subreddit")
-	private boolean isCrosspostableSubreddit;
+	private Boolean isCrosspostableSubreddit;
 
 	/**
 	 * If the subreddit is using the new modmail interface.
 	 * Current user must be a moderator of the Subreddit to view this property.
+	 * Null if user is not moderator.
 	 */
 	@SerializedName("is_enrolled_in_new_modmail")
-	private boolean isEnrolledInNewModmail;
+	private Boolean isEnrolledInNewModmail;
 
 	/**
 	 * The general color of the Subreddits theme.

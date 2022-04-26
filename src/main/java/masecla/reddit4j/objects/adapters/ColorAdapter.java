@@ -12,6 +12,11 @@ public class ColorAdapter extends TypeAdapter<Color> {
 
 	@Override
 	public void write(JsonWriter out, Color value) throws IOException {
+		if (value == null) {
+			out.nullValue();
+			return;
+		}
+
 		int r = value.getRed();
 		int g = value.getGreen();
 		int b = value.getBlue();
