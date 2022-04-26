@@ -12,7 +12,12 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import masecla.reddit4j.objects.*;
+import masecla.reddit4j.objects.KarmaBreakdown;
+import masecla.reddit4j.objects.RedditProfile;
+import masecla.reddit4j.objects.RedditTrophy;
+import masecla.reddit4j.objects.RedditUser;
+import masecla.reddit4j.objects.Sorting;
+import masecla.reddit4j.objects.Vote;
 import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
