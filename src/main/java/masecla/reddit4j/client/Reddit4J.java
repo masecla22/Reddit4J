@@ -123,6 +123,7 @@ public class Reddit4J {
     public Connection useEndpoint(String endpointPath) {
         Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
         connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
+        connection.maxBodySize(0);
         return connection;
     }
 
