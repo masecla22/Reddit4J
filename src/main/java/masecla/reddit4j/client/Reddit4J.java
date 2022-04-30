@@ -12,7 +12,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gson.reflect.TypeToken;
 import masecla.reddit4j.objects.KarmaBreakdown;
+import masecla.reddit4j.objects.RedditData;
 import masecla.reddit4j.objects.RedditProfile;
 import masecla.reddit4j.objects.RedditTrophy;
 import masecla.reddit4j.objects.RedditUser;
@@ -436,7 +438,12 @@ public class Reddit4J {
     public RedditUser getUser(String username) throws IOException, InterruptedException {
         Connection connection = useEndpoint("/user/" + username + "/about").method(Method.GET);
         Response response = this.httpClient.execute(connection);
-        return new Gson().fromJson(response.body(), RedditUser.class);
+        TypeToken<?> ttData = TypeToken.getParameterized(RedditData.class, RedditUser.class);
+        RedditData<RedditUser> fromJson = new Gson().fromJson(response.body(), ttData.getType());
+
+        RedditUser redditUser = fromJson.getData();
+        redditUser.setClient(this);
+        return redditUser;
     }
 
     public SubredditPostListingEndpointRequest getUserSubmitted(String username) {
