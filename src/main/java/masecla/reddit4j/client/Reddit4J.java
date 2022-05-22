@@ -10,11 +10,14 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import com.google.gson.reflect.TypeToken;
 import masecla.reddit4j.objects.KarmaBreakdown;
 import masecla.reddit4j.objects.RedditData;
+import masecla.reddit4j.objects.RedditListing;
+import masecla.reddit4j.objects.RedditPost;
 import masecla.reddit4j.objects.RedditProfile;
 import masecla.reddit4j.objects.RedditTrophy;
 import masecla.reddit4j.objects.RedditUser;
@@ -434,6 +437,22 @@ public class Reddit4J {
 
     public SubredditPostListingEndpointRequest getSubredditPosts(String subreddit, Sorting sorting) {
         return new SubredditPostListingEndpointRequest("/r/" + subreddit + "/" + sorting.getValue(), this);
+    }
+
+    public Optional<RedditPost> getPost(String name) throws IOException, InterruptedException {
+        if (!name.startsWith("t3_")) {
+            name = "t3_" + name;
+        }
+
+        Connection connection = useEndpoint("/api/info").data("id", name);
+        Response response = this.httpClient.execute(connection);
+
+        TypeToken<?> ttData3 = TypeToken.getParameterized(RedditData.class, RedditPost.class);
+        TypeToken<?> ttData2 = TypeToken.getParameterized(RedditListing.class, ttData3.getType());
+        TypeToken<?> ttData = TypeToken.getParameterized(RedditData.class, ttData2.getType());
+        RedditData<RedditListing<RedditData<RedditPost>>> fromJson = new Gson().fromJson(response.body(), ttData.getType());
+
+        return fromJson.getData().getChildren().stream().findFirst().map(RedditData::getData);
     }
 
     public RedditUser getUser(String username) throws IOException, InterruptedException {
