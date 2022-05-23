@@ -25,6 +25,11 @@ public class UserFlairRichText extends RedditObject {
 		return new TypeAdapter<UserFlairRichText>() {
 			@Override
 			public void write(JsonWriter out, UserFlairRichText value) throws IOException {
+				if (value == null) {
+					out.nullValue();
+					return;
+				}
+
 				// Brackets added are purely cosmetic, so it makes more sense
 				out.beginArray().beginObject();
 				{
