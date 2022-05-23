@@ -10,8 +10,20 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
+import com.google.gson.reflect.TypeToken;
+import masecla.reddit4j.objects.KarmaBreakdown;
+import masecla.reddit4j.objects.RedditData;
+import masecla.reddit4j.objects.RedditListing;
+import masecla.reddit4j.objects.RedditPost;
+import masecla.reddit4j.objects.RedditProfile;
+import masecla.reddit4j.objects.RedditTrophy;
+import masecla.reddit4j.objects.RedditUser;
+import masecla.reddit4j.objects.Sorting;
+import masecla.reddit4j.objects.Vote;
+import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
@@ -25,13 +37,9 @@ import com.google.gson.JsonParser;
 import masecla.reddit4j.exceptions.AuthenticationException;
 import masecla.reddit4j.http.GenericHttpClient;
 import masecla.reddit4j.http.clients.RateLimitedClient;
-import masecla.reddit4j.objects.KarmaBreakdown;
-import masecla.reddit4j.objects.RedditProfile;
-import masecla.reddit4j.objects.RedditTrophy;
-import masecla.reddit4j.objects.RedditUser;
 import masecla.reddit4j.objects.preferences.RedditPreferences;
 import masecla.reddit4j.objects.subreddit.RedditSubreddit;
-import masecla.reddit4j.requests.ListingEndpointRequest;
+import masecla.reddit4j.requests.RedditUserListingEndpointRequest;
 import masecla.reddit4j.requests.RedditPreferencesUpdateRequest;
 
 public class Reddit4J {
@@ -118,6 +126,7 @@ public class Reddit4J {
     public Connection useEndpoint(String endpointPath) {
         Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
         connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
+        connection.maxBodySize(0);
         return connection;
     }
 
@@ -161,12 +170,12 @@ public class Reddit4J {
         return new RedditPreferencesUpdateRequest(this);
     }
 
-    public ListingEndpointRequest<RedditUser> getBlocked() {
-        return new ListingEndpointRequest<>("/prefs/blocked", this, RedditUser.class);
+    public RedditUserListingEndpointRequest getBlocked() {
+        return new RedditUserListingEndpointRequest("/prefs/blocked", this);
     }
 
-    public ListingEndpointRequest<RedditUser> getMessaging() {
-        return new ListingEndpointRequest<RedditUser>("/prefs/messaging", this, RedditUser.class) {
+    public RedditUserListingEndpointRequest getMessaging() {
+        return new RedditUserListingEndpointRequest("/prefs/messaging", this) {
             @Override
             public String preprocess(String body) {
                 JsonArray array = JsonParser.parseString(body).getAsJsonArray();
@@ -175,8 +184,8 @@ public class Reddit4J {
         };
     }
 
-    public ListingEndpointRequest<RedditUser> getTrusted() {
-        return new ListingEndpointRequest<>("/prefs/trusted", this, RedditUser.class);
+    public RedditUserListingEndpointRequest getTrusted() {
+        return new RedditUserListingEndpointRequest("/prefs/trusted", this);
     }
 
     public RedditSubreddit getSubreddit(String name) throws IOException, InterruptedException {
@@ -196,8 +205,8 @@ public class Reddit4J {
         return result;
     }
 
-    public ListingEndpointRequest<RedditUser> getFriends() {
-        return new ListingEndpointRequest<RedditUser>("/prefs/friends", this, RedditUser.class) {
+    public RedditUserListingEndpointRequest getFriends() {
+        return new RedditUserListingEndpointRequest("/prefs/friends", this) {
             @Override
             public String preprocess(String body) {
                 JsonArray array = JsonParser.parseString(body).getAsJsonArray();
@@ -228,10 +237,237 @@ public class Reddit4J {
         return properties;
     }
 
+    public void upvote(String fullNameId) throws IOException, InterruptedException {
+        vote(fullNameId, Vote.UP);
+    }
+
+    public void downvote(String fullNameId) throws IOException, InterruptedException {
+        vote(fullNameId, Vote.DOWN);
+    }
+
+    public void unvote(String fullNameId) throws IOException, InterruptedException {
+        vote(fullNameId, Vote.CLEAR);
+    }
+
+    /**
+     * Vote on a Votable thing.
+     * @param fullNameId The t1_ or t3_ full name of the thing to vote on
+     * @param vote UP, DOWN or CLEAR
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void vote(String fullNameId, Vote vote) throws IOException, InterruptedException {
+        Connection request = useEndpoint("/api/vote");
+        request.data("id", fullNameId);
+        request.data("dir", String.valueOf(vote.getValue()));
+        this.httpClient.execute(request);
+    }
+
+    public void delete(String fullNameId) throws IOException, InterruptedException {
+        Connection request = useEndpoint("/api/del");
+        request.data("id", fullNameId);
+        this.httpClient.execute(request);
+    }
+
+    /**
+     * Hide a link.
+     * This removes it from the user's default view of subreddit listings.
+     * @param ids Fullnames
+     * @see #unhide(String...)
+     */
+    public void hide(String... ids) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/hide")
+                .method(Method.POST)
+                .data("id", String.join(",", ids));
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Unhide a link.
+     * @param ids Fullnames
+     * @see #hide(String...)
+     */
+    public void unhide(String... ids) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/unhide")
+                .method(Method.POST)
+                .data("id", String.join(",", ids));
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Lock a link or comment.
+     * Prevents a post or new child comments from receiving new comments.
+     * @param id fullname of the thing
+     * @see #unlock(String)
+     */
+    public void lock(String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/lock")
+                .method(Method.POST)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Unlock a link or comment.
+     * Allow a post or comment to receive new comments.
+     * @param id fullname of the thing
+     * @see #lock(String)
+     */
+    public void unlock(String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/unlock")
+                .method(Method.POST)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Mark a link NSFW.
+     * @param id fullname of a thing
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void marknsfw(String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/marknsfw")
+                .method(Method.POST)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Remove the NSFW marking from a link.
+     * @param id fullname of a thing
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void unmarknsfw(String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/unmarknsfw")
+                .method(Method.POST)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Save a link or comment.
+     * Saved things are kept in the user's saved listing for later perusal.
+     * @param category a category name
+     * @param id fullname of a thing
+     * @see #unsave(String)
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void save(String category, String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/save")
+                .method(Method.POST)
+                .data("category", category)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Unsave a link or comment.
+     * This removes the thing from the user's saved listings as well.
+     * @param id fullname of a thing
+     * @see #save(String, String)
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void unsave(String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/unsave")
+                .method(Method.POST)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Spoiler a link
+     * @param id fullname of a link
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void spoiler(String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/spoiler")
+                .method(Method.POST)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Unspoiler a link
+     * @param id fullname of a link
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void unspoiler(String id) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/unspoiler")
+                .method(Method.POST)
+                .data("id", id);
+        this.httpClient.execute(connection);
+    }
+
     public static Reddit4J rateLimited() {
         Reddit4J result = new Reddit4J();
         result.httpClient = new RateLimitedClient();
         return result;
+    }
+
+    /**
+     * Subscribe to a subreddit.
+     * The user must have access to the subreddit to be able to subscribe to it.
+     * @param subreddit
+     */
+    public void subscribe(String subreddit) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/subscribe")
+                .method(Method.POST)
+                .data("action", "sub")
+                .data("sr_name", subreddit);
+        this.httpClient.execute(connection);
+    }
+
+    /**
+     * Unsubscribe from a subreddit.
+     * @param subreddit
+     */
+    public void unsubscribe(String subreddit) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/api/subscribe")
+                .method(Method.POST)
+                .data("action", "unsub")
+                .data("sr_name", subreddit);
+        this.httpClient.execute(connection);
+    }
+
+    public SubredditPostListingEndpointRequest getSubredditPosts(String subreddit, Sorting sorting) {
+        return new SubredditPostListingEndpointRequest("/r/" + subreddit + "/" + sorting.getValue(), this);
+    }
+
+    public Optional<RedditPost> getPost(String name) throws IOException, InterruptedException {
+        if (!name.startsWith("t3_")) {
+            name = "t3_" + name;
+        }
+
+        Connection connection = useEndpoint("/api/info").data("id", name);
+        Response response = this.httpClient.execute(connection);
+
+        TypeToken<?> ttData3 = TypeToken.getParameterized(RedditData.class, RedditPost.class);
+        TypeToken<?> ttData2 = TypeToken.getParameterized(RedditListing.class, ttData3.getType());
+        TypeToken<?> ttData = TypeToken.getParameterized(RedditData.class, ttData2.getType());
+        RedditData<RedditListing<RedditData<RedditPost>>> fromJson = new Gson().fromJson(response.body(), ttData.getType());
+
+        return fromJson.getData().getChildren().stream().findFirst().map(RedditData::getData);
+    }
+
+    public RedditUser getUser(String username) throws IOException, InterruptedException {
+        Connection connection = useEndpoint("/user/" + username + "/about").method(Method.GET);
+        Response response = this.httpClient.execute(connection);
+        TypeToken<?> ttData = TypeToken.getParameterized(RedditData.class, RedditUser.class);
+        RedditData<RedditUser> fromJson = new Gson().fromJson(response.body(), ttData.getType());
+
+        RedditUser redditUser = fromJson.getData();
+        redditUser.setClient(this);
+        return redditUser;
+    }
+
+    public SubredditPostListingEndpointRequest getUserSubmitted(String username) {
+        return new SubredditPostListingEndpointRequest("/user/" + username + "/submitted", this);
     }
 
     @Deprecated
@@ -353,5 +589,4 @@ public class Reddit4J {
     public ClientType getClientType() {
         return clientType;
     }
-
 }
