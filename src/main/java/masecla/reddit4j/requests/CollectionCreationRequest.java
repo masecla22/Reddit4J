@@ -6,6 +6,7 @@ import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
 
+import masecla.reddit4j.RedditUtils;
 import masecla.reddit4j.client.Reddit4J;
 import masecla.reddit4j.objects.subreddit.RedditSubreddit;
 import masecla.reddit4j.objects.subreddit.SubredditCollection;
@@ -53,6 +54,6 @@ public class CollectionCreationRequest {
 		conn.data("title", title);
 
 		Response rsp = client.getHttpClient().execute(conn);
-		return new SubredditCollection().getGson().fromJson(rsp.body(), SubredditCollection.class);
+		return RedditUtils.gson.fromJson(rsp.body(), SubredditCollection.class);
 	}
 }
