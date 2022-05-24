@@ -1,8 +1,5 @@
 package masecla.reddit4j.objects.preferences;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import masecla.reddit4j.client.Reddit4J;
 import masecla.reddit4j.objects.RedditObject;
 import masecla.reddit4j.objects.preferences.enums.BadCommentAutocollapse;
@@ -421,18 +418,6 @@ public class RedditPreferences extends RedditObject {
 
 	public void setClient(Reddit4J client) {
 		this.client = client;
-	}
-
-	public Gson getGson() {
-		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(MediaStyle.class, MediaStyle.getAdapter());
-		builder.registerTypeAdapter(PrivateMessagePolicy.class, PrivateMessagePolicy.getAdapter());
-		builder.registerTypeAdapter(CountryCode.class, CountryCode.getAdapter());
-		builder.registerTypeAdapter(Language.class, Language.getAdapter());
-		builder.registerTypeAdapter(DefaultCommentSort.class, DefaultCommentSort.getAdapter());
-		builder.registerTypeAdapter(BadCommentAutocollapse.class, BadCommentAutocollapse.getAdapter());
-		Gson gson = builder.create();
-		return gson;
 	}
 
 }

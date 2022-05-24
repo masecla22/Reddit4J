@@ -2,11 +2,11 @@ package masecla.reddit4j.objects.subreddit;
 
 import java.awt.Color;
 
-import com.google.gson.Gson;
-
+import masecla.reddit4j.objects.KindObject;
 import masecla.reddit4j.objects.RedditObject;
 import masecla.reddit4j.objects.preferences.enums.Language;
 
+@KindObject
 public class SubredditSettings extends RedditObject {
 	private boolean default_set; // true
 	private int toxicity_threshold_chat_level; // 1
@@ -63,11 +63,6 @@ public class SubredditSettings extends RedditObject {
 	private boolean allow_predictions; // false
 	private boolean user_flair_pns_enabled; // true
 	private String content_options; // "any"
-
-	@Override
-	public Gson getGson() {
-		return new RedditSubreddit().getGson();
-	}
 
 	public boolean isDefaultSet() {
 		return default_set;

@@ -1,16 +1,17 @@
 package masecla.reddit4j.requests;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
-import masecla.reddit4j.client.Reddit4J;
-import masecla.reddit4j.exceptions.AuthenticationException;
-import masecla.reddit4j.objects.RedditThing;
+import java.io.IOException;
+import java.util.List;
+
 import org.jsoup.Connection;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.reflect.TypeToken;
+
+import masecla.reddit4j.RedditUtils;
+import masecla.reddit4j.client.Reddit4J;
+import masecla.reddit4j.exceptions.AuthenticationException;
+import masecla.reddit4j.objects.RedditListing;
+import masecla.reddit4j.objects.RedditThing;
 
 public abstract class AbstractListingEndpointRequest<T extends RedditThing, S extends AbstractListingEndpointRequest<?, ?>> {
     protected String endpointPath;
@@ -40,16 +41,10 @@ public abstract class AbstractListingEndpointRequest<T extends RedditThing, S ex
         Connection conn = createConnection();
 
         Connection.Response rsp = conn.execute();
-        JsonArray array = JsonParser.parseString(preprocess(rsp.body())).getAsJsonObject().getAsJsonObject("data")
-                .getAsJsonArray("children");
-        Gson gson = new Gson();
 
-        List<T> result = new ArrayList<>();
-        array.forEach(c -> {
-            T value = gson.fromJson(c.getAsJsonObject(), clazz);
-            result.add(value);
-        });
-        return result;
+        TypeToken<?> token = TypeToken.getParameterized(RedditListing.class, clazz);
+        RedditListing<T> listing = RedditUtils.gson.fromJson(preprocess(rsp.body()), token.getType());
+        return listing.getChildren();
     }
 
     public S after(T after) {

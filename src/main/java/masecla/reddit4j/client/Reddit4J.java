@@ -3,9 +3,9 @@ package masecla.reddit4j.client;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.LinkedHashSet;
@@ -13,7 +13,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.jsoup.Connection;
+import org.jsoup.Connection.Method;
+import org.jsoup.Connection.Response;
+import org.jsoup.Jsoup;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+
+import masecla.reddit4j.RedditUtils;
+import masecla.reddit4j.exceptions.AuthenticationException;
+import masecla.reddit4j.http.GenericHttpClient;
+import masecla.reddit4j.http.clients.RateLimitedClient;
 import masecla.reddit4j.objects.KarmaBreakdown;
 import masecla.reddit4j.objects.RedditData;
 import masecla.reddit4j.objects.RedditListing;
@@ -23,25 +35,13 @@ import masecla.reddit4j.objects.RedditTrophy;
 import masecla.reddit4j.objects.RedditUser;
 import masecla.reddit4j.objects.Sorting;
 import masecla.reddit4j.objects.Vote;
-import masecla.reddit4j.requests.RedditCommentListingEndpointRequest;
-import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
-import org.jsoup.Connection;
-import org.jsoup.Connection.Method;
-import org.jsoup.Connection.Response;
-import org.jsoup.Jsoup;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import masecla.reddit4j.exceptions.AuthenticationException;
-import masecla.reddit4j.http.GenericHttpClient;
-import masecla.reddit4j.http.clients.RateLimitedClient;
+import masecla.reddit4j.objects.list.TrophyList;
 import masecla.reddit4j.objects.preferences.RedditPreferences;
 import masecla.reddit4j.objects.subreddit.RedditSubreddit;
-import masecla.reddit4j.requests.RedditUserListingEndpointRequest;
+import masecla.reddit4j.requests.RedditCommentListingEndpointRequest;
 import masecla.reddit4j.requests.RedditPreferencesUpdateRequest;
+import masecla.reddit4j.requests.RedditUserListingEndpointRequest;
+import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
 
 public class Reddit4J {
 
@@ -147,18 +147,15 @@ public class Reddit4J {
     public List<KarmaBreakdown> getKarmaBreakdown() throws IOException, InterruptedException {
         Connection conn = useEndpoint("/api/v1/me/karma").method(Method.GET);
         Response rsp = this.httpClient.execute(conn);
-        List<KarmaBreakdown> result = new ArrayList<>();
-        Gson gson = new Gson();
-        JsonParser.parseString(rsp.body()).getAsJsonObject().get("data").getAsJsonArray()
-                .forEach(c -> result.add(gson.fromJson(c, KarmaBreakdown.class)));
-        return result;
+        Type listType = TypeToken.getParameterized(List.class, KarmaBreakdown.class).getType();
+        Type type = TypeToken.getParameterized(RedditData.class, listType).getType();
+        return RedditUtils.gson.fromJson(rsp.body(), type);
     }
 
     public RedditPreferences getPreferences() throws IOException, InterruptedException {
         Connection conn = useEndpoint("/api/v1/me/prefs").method(Method.GET);
         Response rsp = this.httpClient.execute(conn);
-        Gson gson = new RedditPreferences().getGson();
-        RedditPreferences prf = gson.fromJson(rsp.body(), RedditPreferences.class);
+        RedditPreferences prf = RedditUtils.gson.fromJson(rsp.body(), RedditPreferences.class);
         prf.setClient(this);
         return prf;
     }
@@ -176,13 +173,7 @@ public class Reddit4J {
     }
 
     public RedditUserListingEndpointRequest getMessaging() {
-        return new RedditUserListingEndpointRequest("/prefs/messaging", this) {
-            @Override
-            public String preprocess(String body) {
-                JsonArray array = JsonParser.parseString(body).getAsJsonArray();
-                return array.get(0).getAsJsonObject().toString();
-            }
-        };
+        return new RedditUserListingEndpointRequest("/prefs/messaging", this);
     }
 
     public RedditUserListingEndpointRequest getTrusted() {
@@ -199,43 +190,26 @@ public class Reddit4J {
 
         Connection conn = useEndpoint("/r/" + name + "/about");
         Response rsp = this.httpClient.execute(conn);
-        Gson gson = new RedditSubreddit().getGson();
-        JsonObject data = JsonParser.parseString(rsp.body()).getAsJsonObject().getAsJsonObject("data");
-        RedditSubreddit result = gson.fromJson(data, RedditSubreddit.class);
+        RedditSubreddit result = RedditUtils.gson.fromJson(rsp.body(), RedditSubreddit.class);
         result.setClient(this);
         return result;
     }
 
     public RedditUserListingEndpointRequest getFriends() {
-        return new RedditUserListingEndpointRequest("/prefs/friends", this) {
-            @Override
-            public String preprocess(String body) {
-                JsonArray array = JsonParser.parseString(body).getAsJsonArray();
-                return array.get(0).getAsJsonObject().toString();
-            }
-        };
+        return new RedditUserListingEndpointRequest("/prefs/friends", this);
     }
 
     public List<RedditTrophy> getTrophies() throws IOException, InterruptedException {
         Connection conn = useEndpoint("/api/v1/me/trophies").method(Method.GET);
         Response rsp = this.httpClient.execute(conn);
-        List<RedditTrophy> trophies = new ArrayList<>();
-        Gson gson = new RedditTrophy().getGson();
-        JsonArray trophyArray = JsonParser.parseString(rsp.body()).getAsJsonObject().getAsJsonObject("data")
-                .getAsJsonArray("trophies");
-        trophyArray.forEach(c -> {
-            c = c.getAsJsonObject().getAsJsonObject("data");
-            trophies.add(gson.fromJson(c, RedditTrophy.class));
-        });
-        return trophies;
+        return RedditUtils.gson.fromJson(rsp.body(), TrophyList.class).getTrophies();
     }
 
     public RedditProfile getSelfProfile() throws IOException, InterruptedException, AuthenticationException {
         ensureConnection();
         Connection request = useEndpoint("/api/v1/me");
         Response rsp = httpClient.execute(request);
-        RedditProfile properties = new Gson().fromJson(rsp.body(), RedditProfile.class);
-        return properties;
+        return RedditUtils.gson.fromJson(rsp.body(), RedditProfile.class);
     }
 
     public void upvote(String fullNameId) throws IOException, InterruptedException {
@@ -447,22 +421,17 @@ public class Reddit4J {
 
         Connection connection = useEndpoint("/api/info").data("id", name);
         Response response = this.httpClient.execute(connection);
-
-        TypeToken<?> ttData3 = TypeToken.getParameterized(RedditData.class, RedditPost.class);
-        TypeToken<?> ttData2 = TypeToken.getParameterized(RedditListing.class, ttData3.getType());
-        TypeToken<?> ttData = TypeToken.getParameterized(RedditData.class, ttData2.getType());
-        RedditData<RedditListing<RedditData<RedditPost>>> fromJson = new Gson().fromJson(response.body(), ttData.getType());
-
-        return fromJson.getData().getChildren().stream().findFirst().map(RedditData::getData);
+        // Listing, need to unpack it.
+        Type type = TypeToken.getParameterized(RedditListing.class, RedditPost.class).getType();
+        RedditListing<RedditPost> listing = RedditUtils.gson.fromJson(response.body(), type);
+        return listing.getChildren().stream().findFirst();
     }
 
     public RedditUser getUser(String username) throws IOException, InterruptedException {
         Connection connection = useEndpoint("/user/" + username + "/about").method(Method.GET);
         Response response = this.httpClient.execute(connection);
-        TypeToken<?> ttData = TypeToken.getParameterized(RedditData.class, RedditUser.class);
-        RedditData<RedditUser> fromJson = new Gson().fromJson(response.body(), ttData.getType());
-
-        RedditUser redditUser = fromJson.getData();
+        Type type = TypeToken.getParameterized(RedditData.class, RedditUser.class).getType();
+        RedditUser redditUser = RedditUtils.gson.fromJson(response.body(), type);
         redditUser.setClient(this);
         return redditUser;
     }
