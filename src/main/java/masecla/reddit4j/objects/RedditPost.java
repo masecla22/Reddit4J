@@ -1,17 +1,19 @@
 package masecla.reddit4j.objects;
 
-import com.google.gson.annotations.SerializedName;
-import lombok.Data;
-import masecla.reddit4j.client.Reddit4J;
-
 import java.io.IOException;
 import java.util.List;
+
+import com.google.gson.annotations.SerializedName;
+
+import lombok.Data;
+import masecla.reddit4j.client.Reddit4J;
 
 /**
  * Reddit Post / Link
  * AKA t3
  */
 @Data
+@KindObject
 public class RedditPost extends RedditThing implements RedditPostActions {
 
     private Reddit4J client;

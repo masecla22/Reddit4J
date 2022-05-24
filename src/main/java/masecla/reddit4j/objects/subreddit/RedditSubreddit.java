@@ -3,37 +3,38 @@ package masecla.reddit4j.objects.subreddit;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.google.gson.annotations.SerializedName;
-import lombok.Data;
-import masecla.reddit4j.objects.Sorting;
-import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 
+import lombok.Data;
+import masecla.reddit4j.RedditUtils;
 import masecla.reddit4j.client.Reddit4J;
 import masecla.reddit4j.exceptions.PermissionException;
+import masecla.reddit4j.objects.KindObject;
 import masecla.reddit4j.objects.RedditThing;
-import masecla.reddit4j.objects.adapters.ColorAdapter;
-import masecla.reddit4j.objects.adapters.DimensionAdapter;
+import masecla.reddit4j.objects.Sorting;
 import masecla.reddit4j.objects.preferences.enums.Language;
 import masecla.reddit4j.requests.CollectionCreationRequest;
+import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
 
 /**
  * Subreddit.
  * AKA t5
  */
 @Data
+@KindObject
 public class RedditSubreddit extends RedditThing {
 	@SerializedName("accept_followers")
 	private boolean acceptFollowers;
@@ -639,16 +640,6 @@ public class RedditSubreddit extends RedditThing {
 		return client;
 	}
 
-	@Override
-	public Gson getGson() {
-		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(Language.class, Language.getAdapter());
-		builder.registerTypeAdapter(UserFlairRichText.class, UserFlairRichText.getAdapter());
-		builder.registerTypeAdapter(Color.class, new ColorAdapter());
-		builder.registerTypeAdapter(Dimension.class, new DimensionAdapter());
-		return builder.create();
-	}
-
 	public SubredditSettings getSettings() throws IOException, InterruptedException {
 		Connection conn = client.useEndpoint("/" + this.displayNamePrefixed + "/about/edit");
 		conn.ignoreHttpErrors(true);
@@ -656,26 +647,22 @@ public class RedditSubreddit extends RedditThing {
 		if (rsp.statusCode() == 404) {
 			throw new PermissionException("You cannot edit the settings for " + this.displayNamePrefixed + "!");
 		}
-		Gson gson = this.getGson();
-		return gson.fromJson(rsp.body(), SubredditSettings.class);
+		return RedditUtils.gson.fromJson(rsp.body(), SubredditSettings.class);
 	}
 
 	public List<SubredditCollection> getCollections() throws IOException, InterruptedException {
 		Connection conn = client.useEndpoint("/api/v1/collections/subreddit_collections");
 		conn.data("sr_fullname", this.getFullName());
 		Response rsp = client.getHttpClient().execute(conn);
-		Gson gson = new SubredditCollection().getGson();
-		JsonArray array = JsonParser.parseString(rsp.body()).getAsJsonArray();
-		List<SubredditCollection> collections = new ArrayList<>();
-		array.forEach(c -> collections.add(gson.fromJson(c, SubredditCollection.class)));
-		return collections;
+		Type type = TypeToken.getParameterized(List.class, SubredditCollection.class).getType();
+		return RedditUtils.gson.fromJson(rsp.body(), type);
 	}
 
 	public SubredditCollection getCollection(UUID id, boolean includeLinks) throws IOException, InterruptedException {
 		Connection conn = client.useEndpoint("/api/v1/collections/collection");
 		conn.data("collection_id", id.toString()).data("include_links", includeLinks + "");
 		Response rsp = client.getHttpClient().execute(conn);
-		SubredditCollection result = new SubredditCollection().getGson().fromJson(rsp.body(),
+		SubredditCollection result = RedditUtils.gson.fromJson(rsp.body(),
 				SubredditCollection.class);
 		result.setSubreddit(this);
 		return result;
@@ -752,7 +739,7 @@ public class RedditSubreddit extends RedditThing {
 			JsonObject emojiSet = object.getAsJsonObject(emojiSetName);
 			boolean snoomojis = emojiSetName.equals("snoomojis");
 			for (String currentName : emojiSet.keySet()) {
-				SubredditEmoji currentEmoji = this.getGson().fromJson(emojiSet.getAsJsonObject(currentName),
+				SubredditEmoji currentEmoji = RedditUtils.gson.fromJson(emojiSet.getAsJsonObject(currentName),
 						SubredditEmoji.class);
 				currentEmoji.setSnoomoji(snoomojis);
 				currentEmoji.setName(currentName);

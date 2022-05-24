@@ -7,8 +7,8 @@ import java.util.Map;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 
+import masecla.reddit4j.RedditUtils;
 import masecla.reddit4j.client.Reddit4J;
-import masecla.reddit4j.objects.preferences.RedditPreferences;
 import masecla.reddit4j.objects.preferences.enums.BadCommentAutocollapse;
 import masecla.reddit4j.objects.preferences.enums.CountryCode;
 import masecla.reddit4j.objects.preferences.enums.DefaultCommentSort;
@@ -29,7 +29,7 @@ public class RedditPreferencesUpdateRequest {
 	public void execute() throws IOException, InterruptedException {
 		Connection conn = client.useEndpoint("/api/v1/me/prefs").method(Method.PATCH).ignoreHttpErrors(true)
 				.data("raw_json", "1");
-		String jsonSent = new RedditPreferences().getGson().toJson(modifiedValues);
+		String jsonSent = RedditUtils.gson.toJson(modifiedValues);
 		conn.data("json", jsonSent);
 		client.getHttpClient().execute(conn);
 	}
