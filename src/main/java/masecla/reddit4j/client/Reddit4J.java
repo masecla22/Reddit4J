@@ -23,6 +23,7 @@ import masecla.reddit4j.objects.RedditTrophy;
 import masecla.reddit4j.objects.RedditUser;
 import masecla.reddit4j.objects.Sorting;
 import masecla.reddit4j.objects.Vote;
+import masecla.reddit4j.requests.RedditCommentListingEndpointRequest;
 import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
@@ -557,7 +558,7 @@ public class Reddit4J {
      * otherwise not be allowed, such as PATCH. See
      * https://bugs.openjdk.java.net/browse/JDK-7016595, and
      * https://stackoverflow.com/questions/25163131/httpurlconnection-invalid-http-method-patch
-     * 
+     *
      * @param methods - The methods to force {@link HttpURLConnection} to take.
      */
     private static void allowMethods(String... methods) {
@@ -582,11 +583,15 @@ public class Reddit4J {
             throw new IllegalStateException(e);
         }
     }
-    
+
     /**
      * @return - The client type of this application
      */
     public ClientType getClientType() {
         return clientType;
+    }
+
+    public RedditCommentListingEndpointRequest getCommentsForPost(String subreddit, String id) {
+        return new RedditCommentListingEndpointRequest("/r/" + subreddit + "/comments/" + id, this);
     }
 }
