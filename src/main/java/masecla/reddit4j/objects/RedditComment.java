@@ -1,9 +1,9 @@
 package masecla.reddit4j.objects;
 
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
-
-import java.util.List;
+import masecla.reddit4j.objects.adapters.RedditCommentRepliesAdapter;
 
 @Data
 public class RedditComment extends RedditThing {
@@ -101,7 +101,8 @@ public class RedditComment extends RedditThing {
     /**
      *	A list of replies to this comment
      */
-    private List<RedditThing> replies;
+    @JsonAdapter(RedditCommentRepliesAdapter.class)
+    private RedditData<RedditListing<RedditData<RedditComment>>> replies;
 
     /**
      * true if this post is saved by the logged in user
