@@ -6,8 +6,10 @@ import masecla.reddit4j.objects.AccessToken;
 import masecla.reddit4j.objects.app.Credentials;
 import masecla.reddit4j.objects.app.RedditApp;
 import masecla.reddit4j.objects.app.UserAgent;
+import masecla.reddit4j.objects.reddit.Link;
+import masecla.reddit4j.objects.reddit.Thing;
 import masecla.reddit4j.objects.reddit.KarmaBreakdown;
-import masecla.reddit4j.objects.reddit.RedditData;
+import masecla.reddit4j.objects.reddit.Listing;
 import masecla.reddit4j.objects.reddit.User;
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
 import org.apache.hc.client5.http.fluent.Request;
@@ -60,7 +62,7 @@ public class RedditClient {
         return gson.fromJson(responseBody, User.class);
     }
 
-    public RedditData<KarmaBreakdown> getKarmaBreakdown() throws IOException {
+    public Listing<KarmaBreakdown> getKarmaBreakdown() throws IOException {
         String responseBody = Request.get("https://oauth.reddit.com/api/v1/me/karma")
                 .userAgent(userAgent.toString())
                 .addHeader(HttpHeaders.AUTHORIZATION, bearerToken)
@@ -69,7 +71,11 @@ public class RedditClient {
                 .toString();
         return gson.fromJson(
                 responseBody,
-                TypeToken.getParameterized(RedditData.class, KarmaBreakdown.class).getType()
+                TypeToken.getParameterized(Listing.class, KarmaBreakdown.class).getType()
         );
+    }
+
+    public Thing<Listing<Link>> getSubredditNew() {
+        return null;
     }
 }
