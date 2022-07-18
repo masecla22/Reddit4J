@@ -1,4 +1,4 @@
-package com.github.masecla.objects.app;
+package com.github.masecla.signin.script;
 
 public class UserAgent {
     private final String appName;

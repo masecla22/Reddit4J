@@ -1,10 +1,8 @@
 package com.github.masecla.requests;
 
-import com.github.masecla.factories.AuthorizationFactory;
-
 public class ListingRedditRequest<Response> extends GetRedditRequest<Response> {
-    public ListingRedditRequest(String url, String userAgent, AuthorizationFactory authorizationFactory, Class<Response> responseClass) {
-        super(url, userAgent, authorizationFactory, responseClass);
+    public ListingRedditRequest(String url, RequestPreprocessor requestPreprocessor, Class<Response> responseClass) {
+        super(url, requestPreprocessor, responseClass);
     }
 
     @Override

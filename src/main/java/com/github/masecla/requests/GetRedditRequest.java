@@ -1,6 +1,5 @@
 package com.github.masecla.requests;
 
-import com.github.masecla.factories.AuthorizationFactory;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 
@@ -9,8 +8,8 @@ import java.net.URI;
 public class GetRedditRequest<Response> extends RedditRequest<Response> {
     private final URIBuilder uriBuilder;
 
-    public GetRedditRequest(String url, String userAgent, AuthorizationFactory authorizationFactory, Class<Response> responseClass) {
-        super(userAgent, authorizationFactory, responseClass);
+    public GetRedditRequest(String url, RequestPreprocessor requestPreprocessor, Class<Response> responseClass) {
+        super(requestPreprocessor, responseClass);
         this.uriBuilder = new URIBuilder(URI.create(url));
     }
 

@@ -1,31 +1,24 @@
 package com.github.masecla.requests;
 
 import com.google.gson.Gson;
-import com.github.masecla.factories.AuthorizationFactory;
 import org.apache.hc.client5.http.fluent.Request;
-import org.apache.hc.core5.http.HttpHeaders;
 
 import java.io.IOException;
 
 public abstract class RedditRequest<Response> {
-    private final String userAgent;
-
-    private final AuthorizationFactory authorizationFactory;
+    private final RequestPreprocessor requestPreprocessor;
 
     private final Class<Response> responseClass;
 
     private final Gson gson = new Gson();
 
-    public RedditRequest(String userAgent, AuthorizationFactory authorizationFactory, Class<Response> responseClass) {
-        this.userAgent = userAgent;
-        this.authorizationFactory = authorizationFactory;
+    public RedditRequest(RequestPreprocessor requestPreprocessor, Class<Response> responseClass) {
+        this.requestPreprocessor = requestPreprocessor;
         this.responseClass = responseClass;
     }
 
     public Response execute() throws IOException {
-        String responseBody = createRequest()
-                .userAgent(userAgent)
-                .addHeader(HttpHeaders.AUTHORIZATION, authorizationFactory.get())
+        String responseBody = requestPreprocessor.preprocess(createRequest())
                 .execute()
                 .returnContent()
                 .toString();

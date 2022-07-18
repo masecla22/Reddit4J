@@ -1,4 +1,6 @@
-package com.github.masecla.objects.app;
+package com.github.masecla.signin.script;
+
+import com.github.masecla.signin.RedditApp;
 
 import java.util.Base64;
 

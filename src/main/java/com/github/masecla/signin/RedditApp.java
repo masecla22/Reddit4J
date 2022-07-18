@@ -1,4 +1,4 @@
-package com.github.masecla.objects.app;
+package com.github.masecla.signin;
 
 public interface RedditApp {
     String getClientId();

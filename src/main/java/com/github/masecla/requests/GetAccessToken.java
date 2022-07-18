@@ -1,11 +1,10 @@
 package com.github.masecla.requests;
 
-import com.github.masecla.factories.AuthorizationFactory;
 import com.github.masecla.objects.reddit.AccessToken;
 
 public class GetAccessToken extends PostRedditRequest<AccessToken> {
-    public GetAccessToken(String url, String userAgent, AuthorizationFactory authorizationFactory) {
-        super(url, userAgent, authorizationFactory, AccessToken.class);
+    public GetAccessToken(String url, RequestPreprocessor requestPreprocessor) {
+        super(url, requestPreprocessor, AccessToken.class);
     }
 
     public GetAccessToken setGrantType(String grantType) {
