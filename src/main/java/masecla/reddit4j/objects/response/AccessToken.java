@@ -1,4 +1,4 @@
-package masecla.reddit4j.objects;
+package masecla.reddit4j.objects.response;
 
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
