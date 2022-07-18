@@ -47,7 +47,7 @@ public class RedditClient {
     private void initialize() throws IOException {
         this.accessToken = baseRedditRequestFactory.getAccessToken(
                         "/api/v1/access_token",
-                        redditApp::getAuthorization
+                        redditApp::toString
                 )
                 .setGrantType("password")
                 .setUsername(credentials.getUsername())
