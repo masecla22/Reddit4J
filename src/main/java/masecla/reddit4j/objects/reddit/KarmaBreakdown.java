@@ -1,9 +1,8 @@
 package masecla.reddit4j.objects.reddit;
 
 import com.google.gson.annotations.SerializedName;
-import masecla.reddit4j.objects.RedditObject;
 
-public class KarmaBreakdown extends RedditObject {
+public class KarmaBreakdown {
 	@SerializedName("sr")
 	private String sr;
 

@@ -1,81 +1,81 @@
 package masecla.reddit4j;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import masecla.reddit4j.factories.AuthorizationFactory;
+import masecla.reddit4j.factories.RedditRequestFactory;
 import masecla.reddit4j.objects.AccessToken;
 import masecla.reddit4j.objects.app.Credentials;
 import masecla.reddit4j.objects.app.RedditApp;
 import masecla.reddit4j.objects.app.UserAgent;
-import masecla.reddit4j.objects.reddit.Link;
-import masecla.reddit4j.objects.reddit.Thing;
-import masecla.reddit4j.objects.reddit.KarmaBreakdown;
-import masecla.reddit4j.objects.reddit.Listing;
 import masecla.reddit4j.objects.reddit.User;
-import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
-import org.apache.hc.client5.http.fluent.Request;
-import org.apache.hc.core5.http.HttpHeaders;
+import masecla.reddit4j.objects.response.GetMyKarmaResponse;
+import masecla.reddit4j.objects.response.GetSubredditNewResponse;
+import masecla.reddit4j.requests.GetRedditRequest;
+import masecla.reddit4j.requests.ListingRedditRequest;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 public class RedditClient {
-    private final Gson gson = new Gson();
     private final RedditApp redditApp;
-    private final UserAgent userAgent;
+
     private final Credentials credentials;
+    private final RedditRequestFactory baseRedditRequestFactory;
+
+    private final RedditRequestFactory oauthRedditRequestFactory;
+
     private AccessToken accessToken;
-    private String bearerToken;
+
+    private final AuthorizationFactory bearerFactory = () -> {
+        if (accessToken == null || accessToken.isExpired()) {
+            initialize();
+        }
+        return "bearer " + accessToken.getAccessToken();
+    };
 
     public RedditClient(RedditApp redditApp, UserAgent userAgent, Credentials credentials) {
         this.redditApp = redditApp;
-        this.userAgent = userAgent;
         this.credentials = credentials;
-    }
-
-    public void initialize() throws IOException {
-        String responseBody = Request.post("https://www.reddit.com/api/v1/access_token")
-                .userAgent(userAgent.toString())
-                .addHeader(HttpHeaders.AUTHORIZATION, redditApp.getAuthorization())
-                .body(
-                        MultipartEntityBuilder.create()
-                                .addTextBody("grant_type", "password")
-                                .addTextBody("username", credentials.getUsername())
-                                .addTextBody("password", credentials.getPassword())
-                                .setCharset(StandardCharsets.UTF_8)
-                                .build()
-                )
-                .execute()
-                .returnContent()
-                .toString();
-
-        this.accessToken = gson.fromJson(responseBody, AccessToken.class);
-        this.bearerToken = "bearer " + accessToken.getAccessToken();
-    }
-
-    public User getMe() throws IOException {
-        String responseBody = Request.get("https://oauth.reddit.com/api/v1/me")
-                .userAgent(userAgent.toString())
-                .addHeader(HttpHeaders.AUTHORIZATION, bearerToken)
-                .execute()
-                .returnContent()
-                .toString();
-        return gson.fromJson(responseBody, User.class);
-    }
-
-    public Listing<KarmaBreakdown> getKarmaBreakdown() throws IOException {
-        String responseBody = Request.get("https://oauth.reddit.com/api/v1/me/karma")
-                .userAgent(userAgent.toString())
-                .addHeader(HttpHeaders.AUTHORIZATION, bearerToken)
-                .execute()
-                .returnContent()
-                .toString();
-        return gson.fromJson(
-                responseBody,
-                TypeToken.getParameterized(Listing.class, KarmaBreakdown.class).getType()
+        this.baseRedditRequestFactory = new RedditRequestFactory(
+                "https://www.reddit.com",
+                userAgent.toString()
+        );
+        this.oauthRedditRequestFactory = new RedditRequestFactory(
+                "https://oauth.reddit.com",
+                userAgent.toString()
         );
     }
 
-    public Thing<Listing<Link>> getSubredditNew() {
-        return null;
+    private void initialize() throws IOException {
+        this.accessToken = baseRedditRequestFactory.getAccessToken(
+                        "/api/v1/access_token",
+                        redditApp::getAuthorization
+                )
+                .setGrantType("password")
+                .setUsername(credentials.getUsername())
+                .setPassword(credentials.getPassword())
+                .execute();
+    }
+
+    public GetRedditRequest<User> getMe() {
+        return oauthRedditRequestFactory.getRedditRequest(
+                "/api/v1/me",
+                bearerFactory,
+                User.class
+        );
+    }
+
+    public GetRedditRequest<GetMyKarmaResponse> getMyKarma() {
+        return oauthRedditRequestFactory.getRedditRequest(
+                "/api/v1/me/karma",
+                bearerFactory,
+                GetMyKarmaResponse.class
+        );
+    }
+
+    public ListingRedditRequest<GetSubredditNewResponse> getSubredditNew(String subreddit) {
+        return oauthRedditRequestFactory.listingRedditRequest(
+                "/r/" + subreddit + "/new",
+                bearerFactory,
+                GetSubredditNewResponse.class
+        );
     }
 }
