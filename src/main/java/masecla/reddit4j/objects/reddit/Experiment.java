@@ -12,4 +12,37 @@ public class Experiment {
 
     @SerializedName("experiment_id")
     private int experimentId;
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getVariant() {
+        return variant;
+    }
+
+    public void setVariant(String variant) {
+        this.variant = variant;
+    }
+
+    public int getExperimentId() {
+        return experimentId;
+    }
+
+    public void setExperimentId(int experimentId) {
+        this.experimentId = experimentId;
+    }
+
+    @Override
+    public String toString() {
+        return "Experiment{" +
+                "owner='" + owner + '\'' +
+                ", variant='" + variant + '\'' +
+                ", experimentId=" + experimentId +
+                '}';
+    }
 }

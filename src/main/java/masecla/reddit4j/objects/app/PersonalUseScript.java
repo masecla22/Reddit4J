@@ -1,5 +1,7 @@
 package masecla.reddit4j.objects.app;
 
+import java.util.Base64;
+
 public class PersonalUseScript implements RedditApp {
     private final String clientId;
     private final String clientSecret;
@@ -17,5 +19,11 @@ public class PersonalUseScript implements RedditApp {
     @Override
     public String getClientSecret() {
         return clientSecret;
+    }
+
+    @Override
+    public String toString() {
+        String authorization = getClientId() + ":" + getClientSecret();
+        return "Basic " + Base64.getEncoder().encodeToString(authorization.getBytes());
     }
 }

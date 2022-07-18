@@ -8,4 +8,28 @@ public class Image extends Variant {
 
     @SerializedName("variants")
     private Variants variants;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Variants getVariants() {
+        return variants;
+    }
+
+    public void setVariants(Variants variants) {
+        this.variants = variants;
+    }
+
+    @Override
+    public String toString() {
+        return "Image{" +
+                "id='" + id + '\'' +
+                ", variants=" + variants +
+                "} " + super.toString();
+    }
 }

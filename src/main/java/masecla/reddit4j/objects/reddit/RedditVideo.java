@@ -32,4 +32,100 @@ public class RedditVideo {
 
     @SerializedName("transcoding_status")
     private String transcodingStatus;
+
+    public int getBitrateKbps() {
+        return bitrateKbps;
+    }
+
+    public void setBitrateKbps(int bitrateKbps) {
+        this.bitrateKbps = bitrateKbps;
+    }
+
+    public String getFallbackUrl() {
+        return fallbackUrl;
+    }
+
+    public void setFallbackUrl(String fallbackUrl) {
+        this.fallbackUrl = fallbackUrl;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public String getScrubberMediaUrl() {
+        return scrubberMediaUrl;
+    }
+
+    public void setScrubberMediaUrl(String scrubberMediaUrl) {
+        this.scrubberMediaUrl = scrubberMediaUrl;
+    }
+
+    public String getDashUrl() {
+        return dashUrl;
+    }
+
+    public void setDashUrl(String dashUrl) {
+        this.dashUrl = dashUrl;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public String getHlsUrl() {
+        return hlsUrl;
+    }
+
+    public void setHlsUrl(String hlsUrl) {
+        this.hlsUrl = hlsUrl;
+    }
+
+    public boolean isGif() {
+        return gif;
+    }
+
+    public void setGif(boolean gif) {
+        this.gif = gif;
+    }
+
+    public String getTranscodingStatus() {
+        return transcodingStatus;
+    }
+
+    public void setTranscodingStatus(String transcodingStatus) {
+        this.transcodingStatus = transcodingStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "RedditVideo{" +
+                "bitrateKbps=" + bitrateKbps +
+                ", fallbackUrl='" + fallbackUrl + '\'' +
+                ", height=" + height +
+                ", width=" + width +
+                ", scrubberMediaUrl='" + scrubberMediaUrl + '\'' +
+                ", dashUrl='" + dashUrl + '\'' +
+                ", duration=" + duration +
+                ", hlsUrl='" + hlsUrl + '\'' +
+                ", gif=" + gif +
+                ", transcodingStatus='" + transcodingStatus + '\'' +
+                '}';
+    }
 }

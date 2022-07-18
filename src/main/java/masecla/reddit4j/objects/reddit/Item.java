@@ -8,4 +8,28 @@ public class Item {
 
     @SerializedName("id")
     private int id;
+
+    public String getMediaId() {
+        return mediaId;
+    }
+
+    public void setMediaId(String mediaId) {
+        this.mediaId = mediaId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "mediaId='" + mediaId + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }

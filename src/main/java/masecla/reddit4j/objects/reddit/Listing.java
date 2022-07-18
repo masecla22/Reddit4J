@@ -31,4 +31,64 @@ public class Listing<T> {
 
     @SerializedName("geo_filter")
     private String geoFilter;
+
+    public String getBefore() {
+        return before;
+    }
+
+    public void setBefore(String before) {
+        this.before = before;
+    }
+
+    public String getAfter() {
+        return after;
+    }
+
+    public void setAfter(String after) {
+        this.after = after;
+    }
+
+    public String getModhash() {
+        return modhash;
+    }
+
+    public void setModhash(String modhash) {
+        this.modhash = modhash;
+    }
+
+    public List<Thing<T>> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Thing<T>> children) {
+        this.children = children;
+    }
+
+    public int getDist() {
+        return dist;
+    }
+
+    public void setDist(int dist) {
+        this.dist = dist;
+    }
+
+    public String getGeoFilter() {
+        return geoFilter;
+    }
+
+    public void setGeoFilter(String geoFilter) {
+        this.geoFilter = geoFilter;
+    }
+
+    @Override
+    public String toString() {
+        return "Listing{" +
+                "before='" + before + '\'' +
+                ", after='" + after + '\'' +
+                ", modhash='" + modhash + '\'' +
+                ", children=" + children +
+                ", dist=" + dist +
+                ", geoFilter='" + geoFilter + '\'' +
+                '}';
+    }
 }
