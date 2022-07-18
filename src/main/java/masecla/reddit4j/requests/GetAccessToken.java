@@ -1,7 +1,7 @@
 package masecla.reddit4j.requests;
 
 import masecla.reddit4j.factories.AuthorizationFactory;
-import masecla.reddit4j.objects.response.AccessToken;
+import masecla.reddit4j.objects.reddit.AccessToken;
 
 public class GetAccessToken extends PostRedditRequest<AccessToken> {
     public GetAccessToken(String url, String userAgent, AuthorizationFactory authorizationFactory) {

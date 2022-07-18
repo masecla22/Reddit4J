@@ -2,7 +2,7 @@ package masecla.reddit4j;
 
 import masecla.reddit4j.factories.AuthorizationFactory;
 import masecla.reddit4j.factories.RedditRequestFactory;
-import masecla.reddit4j.objects.response.AccessToken;
+import masecla.reddit4j.objects.reddit.AccessToken;
 import masecla.reddit4j.objects.app.Credentials;
 import masecla.reddit4j.objects.app.RedditApp;
 import masecla.reddit4j.objects.app.UserAgent;
