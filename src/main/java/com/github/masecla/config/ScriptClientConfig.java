@@ -4,19 +4,19 @@ import com.github.masecla.factories.RedditRequestFactory;
 import com.github.masecla.objects.reddit.AccessToken;
 import com.github.masecla.requests.GetAccessToken;
 import com.github.masecla.requests.RequestPreprocessor;
-import com.github.masecla.signin.script.Credentials;
-import com.github.masecla.signin.script.PersonalUseScript;
-import com.github.masecla.signin.script.UserAgent;
+import com.github.masecla.objects.app.script.Credentials;
+import com.github.masecla.objects.app.script.PersonalUseScript;
+import com.github.masecla.objects.app.script.UserAgent;
 import org.apache.hc.core5.http.HttpHeaders;
 
-public class PersonalUseScriptClientConfig implements RedditClientConfig {
+public class ScriptClientConfig implements RedditClientConfig {
     private final RequestPreprocessor userAgentPreprocessor;
 
     private final GetAccessToken getAccessToken;
 
     private AccessToken accessToken;
 
-    public PersonalUseScriptClientConfig(PersonalUseScript personalUseScript, UserAgent userAgent, Credentials credentials) {
+    public ScriptClientConfig(PersonalUseScript personalUseScript, UserAgent userAgent, Credentials credentials) {
         this.userAgentPreprocessor = request -> request.userAgent(userAgent.toString());
         this.getAccessToken =
                 new RedditRequestFactory("https://www.reddit.com", request ->

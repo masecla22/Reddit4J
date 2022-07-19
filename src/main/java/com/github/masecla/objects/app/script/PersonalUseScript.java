@@ -1,10 +1,8 @@
-package com.github.masecla.signin.script;
-
-import com.github.masecla.signin.RedditApp;
+package com.github.masecla.objects.app.script;
 
 import java.util.Base64;
 
-public class PersonalUseScript implements RedditApp {
+public class PersonalUseScript {
     private final String clientId;
     private final String clientSecret;
 
@@ -13,12 +11,10 @@ public class PersonalUseScript implements RedditApp {
         this.clientSecret = clientSecret;
     }
 
-    @Override
     public String getClientId() {
         return clientId;
     }
 
-    @Override
     public String getClientSecret() {
         return clientSecret;
     }
