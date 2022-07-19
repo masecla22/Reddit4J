@@ -3,8 +3,8 @@ package com.github.masecla.requests;
 import com.github.masecla.objects.reddit.AccessToken;
 
 public class GetAccessToken extends PostRedditRequest<AccessToken> {
-    public GetAccessToken(String url, RequestPreprocessor requestPreprocessor) {
-        super(url, requestPreprocessor, AccessToken.class);
+    public GetAccessToken(RequestPreprocessor requestPreprocessor) {
+        super("https://www.reddit.com/api/v1/access_token", requestPreprocessor, AccessToken.class);
     }
 
     public GetAccessToken setGrantType(String grantType) {

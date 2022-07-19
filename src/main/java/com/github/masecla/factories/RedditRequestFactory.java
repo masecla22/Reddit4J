@@ -1,9 +1,10 @@
 package com.github.masecla.factories;
 
-import com.github.masecla.requests.GetAccessToken;
+import com.github.masecla.objects.reddit.PreferenceSettings;
 import com.github.masecla.requests.GetRedditRequest;
 import com.github.masecla.requests.ListingRedditRequest;
 import com.github.masecla.requests.RequestPreprocessor;
+import com.github.masecla.requests.SetMyPreferences;
 
 public class RedditRequestFactory {
     private final String baseUrl;
@@ -12,10 +13,6 @@ public class RedditRequestFactory {
     public RedditRequestFactory(String baseUrl, RequestPreprocessor requestPreprocessor) {
         this.baseUrl = baseUrl;
         this.requestPreprocessor = requestPreprocessor;
-    }
-
-    public GetAccessToken getAccessToken(String endpoint) {
-        return new GetAccessToken(baseUrl + endpoint, requestPreprocessor);
     }
 
     public <Response> GetRedditRequest<Response> getRedditRequest(String endpoint, Class<Response> responseClass) {
@@ -32,5 +29,9 @@ public class RedditRequestFactory {
                 requestPreprocessor,
                 responseClass
         );
+    }
+
+    public SetMyPreferences setMyPreferences(String endpoint) {
+        return new SetMyPreferences(baseUrl + endpoint, requestPreprocessor, PreferenceSettings.class);
     }
 }

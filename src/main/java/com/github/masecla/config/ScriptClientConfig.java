@@ -19,11 +19,10 @@ public class ScriptClientConfig implements RedditClientConfig {
     public ScriptClientConfig(PersonalUseScript personalUseScript, UserAgent userAgent, Credentials credentials) {
         this.userAgentPreprocessor = request -> request.userAgent(userAgent.toString());
         this.getAccessToken =
-                new RedditRequestFactory("https://www.reddit.com", request ->
+                new GetAccessToken(request ->
                         this.userAgentPreprocessor
                                 .preprocess(request)
                                 .addHeader(HttpHeaders.AUTHORIZATION, personalUseScript.toString()))
-                        .getAccessToken("/api/v1/access_token")
                         .setGrantType("password")
                         .setUsername(credentials.getUsername())
                         .setPassword(credentials.getPassword());

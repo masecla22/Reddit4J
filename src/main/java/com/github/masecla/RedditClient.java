@@ -8,6 +8,7 @@ import com.github.masecla.objects.response.GetMyKarmaResponse;
 import com.github.masecla.objects.response.GetSubredditNewResponse;
 import com.github.masecla.requests.GetRedditRequest;
 import com.github.masecla.requests.ListingRedditRequest;
+import com.github.masecla.requests.SetMyPreferences;
 
 public class RedditClient {
     private final RedditRequestFactory redditRequestFactory;
@@ -42,5 +43,9 @@ public class RedditClient {
                 "/api/v1/me/prefs",
                 PreferenceSettings.class
         );
+    }
+
+    public SetMyPreferences setMyPreferences() {
+        return redditRequestFactory.setMyPreferences("/api/v1/me/prefs");
     }
 }

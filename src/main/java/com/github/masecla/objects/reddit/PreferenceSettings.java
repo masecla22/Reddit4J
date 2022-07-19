@@ -253,6 +253,670 @@ public class PreferenceSettings {
     @SerializedName("show_location_based_recommendations")
     private boolean showLocationBasedRecommendations;
 
+    public boolean isBeta() {
+        return beta;
+    }
+
+    public void setBeta(boolean beta) {
+        this.beta = beta;
+    }
+
+    public JsonElement getDefaultThemeSr() {
+        return defaultThemeSr;
+    }
+
+    public void setDefaultThemeSr(JsonElement defaultThemeSr) {
+        this.defaultThemeSr = defaultThemeSr;
+    }
+
+    public boolean isThreadedMessages() {
+        return threadedMessages;
+    }
+
+    public void setThreadedMessages(boolean threadedMessages) {
+        this.threadedMessages = threadedMessages;
+    }
+
+    public boolean isEmailCommentReply() {
+        return emailCommentReply;
+    }
+
+    public void setEmailCommentReply(boolean emailCommentReply) {
+        this.emailCommentReply = emailCommentReply;
+    }
+
+    public boolean isPrivateFeeds() {
+        return privateFeeds;
+    }
+
+    public void setPrivateFeeds(boolean privateFeeds) {
+        this.privateFeeds = privateFeeds;
+    }
+
+    public boolean isActivityRelevantAds() {
+        return activityRelevantAds;
+    }
+
+    public void setActivityRelevantAds(boolean activityRelevantAds) {
+        this.activityRelevantAds = activityRelevantAds;
+    }
+
+    public boolean isEmailMessages() {
+        return emailMessages;
+    }
+
+    public void setEmailMessages(boolean emailMessages) {
+        this.emailMessages = emailMessages;
+    }
+
+    public boolean isProfileOptOut() {
+        return profileOptOut;
+    }
+
+    public void setProfileOptOut(boolean profileOptOut) {
+        this.profileOptOut = profileOptOut;
+    }
+
+    public boolean isVideoAutoplay() {
+        return videoAutoplay;
+    }
+
+    public void setVideoAutoplay(boolean videoAutoplay) {
+        this.videoAutoplay = videoAutoplay;
+    }
+
+    public boolean isEmailPrivateMessage() {
+        return emailPrivateMessage;
+    }
+
+    public void setEmailPrivateMessage(boolean emailPrivateMessage) {
+        this.emailPrivateMessage = emailPrivateMessage;
+    }
+
+    public Geopopular getGeopopular() {
+        return geopopular;
+    }
+
+    public void setGeopopular(Geopopular geopopular) {
+        this.geopopular = geopopular;
+    }
+
+    public boolean isShowLinkFlair() {
+        return showLinkFlair;
+    }
+
+    public void setShowLinkFlair(boolean showLinkFlair) {
+        this.showLinkFlair = showLinkFlair;
+    }
+
+    public boolean isShowTrending() {
+        return showTrending;
+    }
+
+    public void setShowTrending(boolean showTrending) {
+        this.showTrending = showTrending;
+    }
+
+    public boolean isSendWelcomeMessages() {
+        return sendWelcomeMessages;
+    }
+
+    public void setSendWelcomeMessages(boolean sendWelcomeMessages) {
+        this.sendWelcomeMessages = sendWelcomeMessages;
+    }
+
+    public CountryCode getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(CountryCode countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    public boolean isDesignBeta() {
+        return designBeta;
+    }
+
+    public void setDesignBeta(boolean designBeta) {
+        this.designBeta = designBeta;
+    }
+
+    public boolean isMonitorMentions() {
+        return monitorMentions;
+    }
+
+    public void setMonitorMentions(boolean monitorMentions) {
+        this.monitorMentions = monitorMentions;
+    }
+
+    public boolean isHideDowns() {
+        return hideDowns;
+    }
+
+    public void setHideDowns(boolean hideDowns) {
+        this.hideDowns = hideDowns;
+    }
+
+    public boolean isClickgadget() {
+        return clickgadget;
+    }
+
+    public void setClickgadget(boolean clickgadget) {
+        this.clickgadget = clickgadget;
+    }
+
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    public boolean isIgnoreSuggestedSort() {
+        return ignoreSuggestedSort;
+    }
+
+    public void setIgnoreSuggestedSort(boolean ignoreSuggestedSort) {
+        this.ignoreSuggestedSort = ignoreSuggestedSort;
+    }
+
+    public boolean isShowPresence() {
+        return showPresence;
+    }
+
+    public void setShowPresence(boolean showPresence) {
+        this.showPresence = showPresence;
+    }
+
+    public boolean isEmailUpvoteComment() {
+        return emailUpvoteComment;
+    }
+
+    public void setEmailUpvoteComment(boolean emailUpvoteComment) {
+        this.emailUpvoteComment = emailUpvoteComment;
+    }
+
+    public boolean isEmailDigests() {
+        return emailDigests;
+    }
+
+    public void setEmailDigests(boolean emailDigests) {
+        this.emailDigests = emailDigests;
+    }
+
+    public String getLayout() {
+        return layout;
+    }
+
+    public void setLayout(String layout) {
+        this.layout = layout;
+    }
+
+    public JsonElement getNumComments() {
+        return numComments;
+    }
+
+    public void setNumComments(JsonElement numComments) {
+        this.numComments = numComments;
+    }
+
+    public boolean isFeedRecommendationsEnabled() {
+        return feedRecommendationsEnabled;
+    }
+
+    public void setFeedRecommendationsEnabled(boolean feedRecommendationsEnabled) {
+        this.feedRecommendationsEnabled = feedRecommendationsEnabled;
+    }
+
+    public boolean isLabelNsfw() {
+        return labelNsfw;
+    }
+
+    public void setLabelNsfw(boolean labelNsfw) {
+        this.labelNsfw = labelNsfw;
+    }
+
+    public boolean isResearch() {
+        return research;
+    }
+
+    public void setResearch(boolean research) {
+        this.research = research;
+    }
+
+    public boolean isUseGlobalDefaults() {
+        return useGlobalDefaults;
+    }
+
+    public void setUseGlobalDefaults(boolean useGlobalDefaults) {
+        this.useGlobalDefaults = useGlobalDefaults;
+    }
+
+    public boolean isShowSnoovatar() {
+        return showSnoovatar;
+    }
+
+    public void setShowSnoovatar(boolean showSnoovatar) {
+        this.showSnoovatar = showSnoovatar;
+    }
+
+    public boolean isOver18() {
+        return over18;
+    }
+
+    public void setOver18(boolean over18) {
+        this.over18 = over18;
+    }
+
+    public boolean isLegacySearch() {
+        return legacySearch;
+    }
+
+    public void setLegacySearch(boolean legacySearch) {
+        this.legacySearch = legacySearch;
+    }
+
+    public boolean isLiveOrangereds() {
+        return liveOrangereds;
+    }
+
+    public void setLiveOrangereds(boolean liveOrangereds) {
+        this.liveOrangereds = liveOrangereds;
+    }
+
+    public boolean isHighlightControversial() {
+        return highlightControversial;
+    }
+
+    public void setHighlightControversial(boolean highlightControversial) {
+        this.highlightControversial = highlightControversial;
+    }
+
+    public boolean isNoProfanity() {
+        return noProfanity;
+    }
+
+    public void setNoProfanity(boolean noProfanity) {
+        this.noProfanity = noProfanity;
+    }
+
+    public boolean isDomainDetails() {
+        return domainDetails;
+    }
+
+    public void setDomainDetails(boolean domainDetails) {
+        this.domainDetails = domainDetails;
+    }
+
+    public boolean isCollapseLeftBar() {
+        return collapseLeftBar;
+    }
+
+    public void setCollapseLeftBar(boolean collapseLeftBar) {
+        this.collapseLeftBar = collapseLeftBar;
+    }
+
+    public boolean isEmailCommunityDiscovery() {
+        return emailCommunityDiscovery;
+    }
+
+    public void setEmailCommunityDiscovery(boolean emailCommunityDiscovery) {
+        this.emailCommunityDiscovery = emailCommunityDiscovery;
+    }
+
+    public BadCommentAutocollapse getBadCommentAutocollapse() {
+        return badCommentAutocollapse;
+    }
+
+    public void setBadCommentAutocollapse(BadCommentAutocollapse badCommentAutocollapse) {
+        this.badCommentAutocollapse = badCommentAutocollapse;
+    }
+
+    public boolean isHideUps() {
+        return hideUps;
+    }
+
+    public void setHideUps(boolean hideUps) {
+        this.hideUps = hideUps;
+    }
+
+    public boolean isThirdPartyDataPersonalizedAds() {
+        return thirdPartyDataPersonalizedAds;
+    }
+
+    public void setThirdPartyDataPersonalizedAds(boolean thirdPartyDataPersonalizedAds) {
+        this.thirdPartyDataPersonalizedAds = thirdPartyDataPersonalizedAds;
+    }
+
+    public boolean isEmailChatRequest() {
+        return emailChatRequest;
+    }
+
+    public void setEmailChatRequest(boolean emailChatRequest) {
+        this.emailChatRequest = emailChatRequest;
+    }
+
+    public boolean isAllowClicktracking() {
+        return allowClicktracking;
+    }
+
+    public void setAllowClicktracking(boolean allowClicktracking) {
+        this.allowClicktracking = allowClicktracking;
+    }
+
+    public boolean isHideFromRobots() {
+        return hideFromRobots;
+    }
+
+    public void setHideFromRobots(boolean hideFromRobots) {
+        this.hideFromRobots = hideFromRobots;
+    }
+
+    public boolean isShowTwitter() {
+        return showTwitter;
+    }
+
+    public void setShowTwitter(boolean showTwitter) {
+        this.showTwitter = showTwitter;
+    }
+
+    public boolean isCompress() {
+        return compress;
+    }
+
+    public void setCompress(boolean compress) {
+        this.compress = compress;
+    }
+
+    public AcceptPms getAcceptPms() {
+        return acceptPms;
+    }
+
+    public void setAcceptPms(AcceptPms acceptPms) {
+        this.acceptPms = acceptPms;
+    }
+
+    public boolean isStoreVisits() {
+        return storeVisits;
+    }
+
+    public void setStoreVisits(boolean storeVisits) {
+        this.storeVisits = storeVisits;
+    }
+
+    public boolean isThreadedModmail() {
+        return threadedModmail;
+    }
+
+    public void setThreadedModmail(boolean threadedModmail) {
+        this.threadedModmail = threadedModmail;
+    }
+
+    public boolean isEmailUpvotePost() {
+        return emailUpvotePost;
+    }
+
+    public void setEmailUpvotePost(boolean emailUpvotePost) {
+        this.emailUpvotePost = emailUpvotePost;
+    }
+
+    public JsonElement getMinLinkScore() {
+        return minLinkScore;
+    }
+
+    public void setMinLinkScore(JsonElement minLinkScore) {
+        this.minLinkScore = minLinkScore;
+    }
+
+    public Media getMediaPreview() {
+        return mediaPreview;
+    }
+
+    public void setMediaPreview(Media mediaPreview) {
+        this.mediaPreview = mediaPreview;
+    }
+
+    public boolean isEmailUserNewFollower() {
+        return emailUserNewFollower;
+    }
+
+    public void setEmailUserNewFollower(boolean emailUserNewFollower) {
+        this.emailUserNewFollower = emailUserNewFollower;
+    }
+
+    public boolean isNightmode() {
+        return nightmode;
+    }
+
+    public void setNightmode(boolean nightmode) {
+        this.nightmode = nightmode;
+    }
+
+    public boolean isEnableDefaultThemes() {
+        return enableDefaultThemes;
+    }
+
+    public void setEnableDefaultThemes(boolean enableDefaultThemes) {
+        this.enableDefaultThemes = enableDefaultThemes;
+    }
+
+    public boolean isThirdPartySiteDataPersonalizedContent() {
+        return thirdPartySiteDataPersonalizedContent;
+    }
+
+    public void setThirdPartySiteDataPersonalizedContent(boolean thirdPartySiteDataPersonalizedContent) {
+        this.thirdPartySiteDataPersonalizedContent = thirdPartySiteDataPersonalizedContent;
+    }
+
+    public boolean isThirdPartySiteDataPersonalizedAds() {
+        return thirdPartySiteDataPersonalizedAds;
+    }
+
+    public void setThirdPartySiteDataPersonalizedAds(boolean thirdPartySiteDataPersonalizedAds) {
+        this.thirdPartySiteDataPersonalizedAds = thirdPartySiteDataPersonalizedAds;
+    }
+
+    public JsonElement getSurveyLastSeenTime() {
+        return surveyLastSeenTime;
+    }
+
+    public void setSurveyLastSeenTime(JsonElement surveyLastSeenTime) {
+        this.surveyLastSeenTime = surveyLastSeenTime;
+    }
+
+    public boolean isShowStylesheets() {
+        return showStylesheets;
+    }
+
+    public void setShowStylesheets(boolean showStylesheets) {
+        this.showStylesheets = showStylesheets;
+    }
+
+    public boolean isEnableFollowers() {
+        return enableFollowers;
+    }
+
+    public void setEnableFollowers(boolean enableFollowers) {
+        this.enableFollowers = enableFollowers;
+    }
+
+    public boolean isEmailNewUserWelcome() {
+        return emailNewUserWelcome;
+    }
+
+    public void setEmailNewUserWelcome(boolean emailNewUserWelcome) {
+        this.emailNewUserWelcome = emailNewUserWelcome;
+    }
+
+    public boolean isPublicVotes() {
+        return publicVotes;
+    }
+
+    public void setPublicVotes(boolean publicVotes) {
+        this.publicVotes = publicVotes;
+    }
+
+    public boolean isEmailPostReply() {
+        return emailPostReply;
+    }
+
+    public void setEmailPostReply(boolean emailPostReply) {
+        this.emailPostReply = emailPostReply;
+    }
+
+    public boolean isCollapseReadMessages() {
+        return collapseReadMessages;
+    }
+
+    public void setCollapseReadMessages(boolean collapseReadMessages) {
+        this.collapseReadMessages = collapseReadMessages;
+    }
+
+    public boolean isShowFlair() {
+        return showFlair;
+    }
+
+    public void setShowFlair(boolean showFlair) {
+        this.showFlair = showFlair;
+    }
+
+    public boolean isMarkMessagesRead() {
+        return markMessagesRead;
+    }
+
+    public void setMarkMessagesRead(boolean markMessagesRead) {
+        this.markMessagesRead = markMessagesRead;
+    }
+
+    public boolean isSearchIncludeOver18() {
+        return searchIncludeOver18;
+    }
+
+    public void setSearchIncludeOver18(boolean searchIncludeOver18) {
+        this.searchIncludeOver18 = searchIncludeOver18;
+    }
+
+    public boolean isHideAds() {
+        return hideAds;
+    }
+
+    public void setHideAds(boolean hideAds) {
+        this.hideAds = hideAds;
+    }
+
+    public boolean isThirdPartyPersonalizedAds() {
+        return thirdPartyPersonalizedAds;
+    }
+
+    public void setThirdPartyPersonalizedAds(boolean thirdPartyPersonalizedAds) {
+        this.thirdPartyPersonalizedAds = thirdPartyPersonalizedAds;
+    }
+
+    public boolean isEmailUsernameMention() {
+        return emailUsernameMention;
+    }
+
+    public void setEmailUsernameMention(boolean emailUsernameMention) {
+        this.emailUsernameMention = emailUsernameMention;
+    }
+
+    public boolean isTopKarmaSubreddits() {
+        return topKarmaSubreddits;
+    }
+
+    public void setTopKarmaSubreddits(boolean topKarmaSubreddits) {
+        this.topKarmaSubreddits = topKarmaSubreddits;
+    }
+
+    public boolean isNewwindow() {
+        return newwindow;
+    }
+
+    public void setNewwindow(boolean newwindow) {
+        this.newwindow = newwindow;
+    }
+
+    public JsonElement getNumsites() {
+        return numsites;
+    }
+
+    public void setNumsites(JsonElement numsites) {
+        this.numsites = numsites;
+    }
+
+    public JsonElement getMinCommentScore() {
+        return minCommentScore;
+    }
+
+    public void setMinCommentScore(JsonElement minCommentScore) {
+        this.minCommentScore = minCommentScore;
+    }
+
+    public boolean isSendCrosspostMessages() {
+        return sendCrosspostMessages;
+    }
+
+    public void setSendCrosspostMessages(boolean sendCrosspostMessages) {
+        this.sendCrosspostMessages = sendCrosspostMessages;
+    }
+
+    public Media getMedia() {
+        return media;
+    }
+
+    public void setMedia(Media media) {
+        this.media = media;
+    }
+
+    public boolean isPublicServerSeconds() {
+        return publicServerSeconds;
+    }
+
+    public void setPublicServerSeconds(boolean publicServerSeconds) {
+        this.publicServerSeconds = publicServerSeconds;
+    }
+
+    public boolean isShowGoldExpiration() {
+        return showGoldExpiration;
+    }
+
+    public void setShowGoldExpiration(boolean showGoldExpiration) {
+        this.showGoldExpiration = showGoldExpiration;
+    }
+
+    public boolean isHighlightNewComments() {
+        return highlightNewComments;
+    }
+
+    public void setHighlightNewComments(boolean highlightNewComments) {
+        this.highlightNewComments = highlightNewComments;
+    }
+
+    public boolean isEmailUnsubscribeAll() {
+        return emailUnsubscribeAll;
+    }
+
+    public void setEmailUnsubscribeAll(boolean emailUnsubscribeAll) {
+        this.emailUnsubscribeAll = emailUnsubscribeAll;
+    }
+
+    public DefaultCommentSort getDefaultCommentSort() {
+        return defaultCommentSort;
+    }
+
+    public void setDefaultCommentSort(DefaultCommentSort defaultCommentSort) {
+        this.defaultCommentSort = defaultCommentSort;
+    }
+
+    public boolean isShowLocationBasedRecommendations() {
+        return showLocationBasedRecommendations;
+    }
+
+    public void setShowLocationBasedRecommendations(boolean showLocationBasedRecommendations) {
+        this.showLocationBasedRecommendations = showLocationBasedRecommendations;
+    }
+
     @Override
     public String toString() {
         return "PreferenceSettings{" +
