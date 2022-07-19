@@ -2,6 +2,7 @@ package com.github.masecla;
 
 import com.github.masecla.config.RedditClientConfig;
 import com.github.masecla.factories.RedditRequestFactory;
+import com.github.masecla.objects.reddit.PreferenceSettings;
 import com.github.masecla.objects.reddit.User;
 import com.github.masecla.objects.response.GetMyKarmaResponse;
 import com.github.masecla.objects.response.GetSubredditNewResponse;
@@ -33,6 +34,13 @@ public class RedditClient {
         return redditRequestFactory.listingRedditRequest(
                 "/r/" + subreddit + "/new",
                 GetSubredditNewResponse.class
+        );
+    }
+
+    public GetRedditRequest<PreferenceSettings> getMyPreferences() {
+        return redditRequestFactory.getRedditRequest(
+                "/api/v1/me/prefs",
+                PreferenceSettings.class
         );
     }
 }
