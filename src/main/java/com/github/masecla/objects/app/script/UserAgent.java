@@ -2,29 +2,19 @@ package com.github.masecla.objects.app.script;
 
 public class UserAgent {
     private final String appName;
-    private final String author;
+
     private final String version;
 
-    public UserAgent(String appName, String author, String version) {
+    private final String redditUsername;
+
+    public UserAgent(String appName, String version, String redditUsername) {
         this.appName = appName;
-        this.author = author;
         this.version = version;
-    }
-
-    public String getAppName() {
-        return appName;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public String getVersion() {
-        return version;
+        this.redditUsername = redditUsername;
     }
 
     @Override
     public String toString() {
-        return appName + "/" + version + " by " + author;
+        return "java:" + appName + ":" + version + " (by /u/" + redditUsername + ")";
     }
 }
