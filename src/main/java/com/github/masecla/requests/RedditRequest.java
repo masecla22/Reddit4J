@@ -1,9 +1,12 @@
 package com.github.masecla.requests;
 
 import com.google.gson.Gson;
+import org.apache.hc.client5.http.fluent.Async;
+import org.apache.hc.client5.http.fluent.ContentResponseHandler;
 import org.apache.hc.client5.http.fluent.Request;
 
 import java.io.IOException;
+import java.util.concurrent.Future;
 
 public abstract class RedditRequest<Response> {
     private final RequestPreprocessor requestPreprocessor;
@@ -18,7 +21,7 @@ public abstract class RedditRequest<Response> {
     }
 
     public Response execute() throws IOException {
-        String responseBody = requestPreprocessor.preprocess(createRequest())
+        String responseBody = buildRequest()
                 .execute()
                 .returnContent()
                 .toString();
@@ -26,5 +29,16 @@ public abstract class RedditRequest<Response> {
         return gson.fromJson(responseBody, responseClass);
     }
 
+    public Future<Response> executeAsync() throws IOException {
+        return Async.newInstance().execute(buildRequest(), classicHttpResponse -> {
+            String responseBody = new ContentResponseHandler().handleResponse(classicHttpResponse).asString();
+            return gson.fromJson(responseBody, responseClass);
+        });
+    }
+
     protected abstract Request createRequest();
+
+    private Request buildRequest() throws IOException {
+        return requestPreprocessor.preprocess(createRequest());
+    }
 }
