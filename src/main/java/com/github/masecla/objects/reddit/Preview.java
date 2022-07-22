@@ -8,6 +8,9 @@ public class Preview {
     @SerializedName("images")
     private List<Image> images;
 
+    @SerializedName("reddit_video_preview")
+    private RedditVideo redditVideoPreview;
+
     @SerializedName("enabled")
     private boolean enabled;
 
@@ -17,6 +20,14 @@ public class Preview {
 
     public void setImages(List<Image> images) {
         this.images = images;
+    }
+
+    public RedditVideo getRedditVideoPreview() {
+        return redditVideoPreview;
+    }
+
+    public void setRedditVideoPreview(RedditVideo redditVideoPreview) {
+        this.redditVideoPreview = redditVideoPreview;
     }
 
     public boolean isEnabled() {
@@ -31,6 +42,7 @@ public class Preview {
     public String toString() {
         return "Preview{" +
                 "images=" + images +
+                ", redditVideoPreview=" + redditVideoPreview +
                 ", enabled=" + enabled +
                 '}';
     }
