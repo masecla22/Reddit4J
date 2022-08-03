@@ -14,7 +14,6 @@ import java.io.IOException;
 public class RedditCommentRepliesAdapter extends TypeAdapter<RedditData<RedditListing<RedditData<RedditComment>>>> {
     @Override
     public void write(JsonWriter out, RedditData<RedditListing<RedditData<RedditComment>>> value) throws IOException {
-        System.out.println("Write");
     }
 
     @Override
