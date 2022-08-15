@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
 import java.util.Map;
 
 public class Link {
@@ -342,6 +343,9 @@ public class Link {
 
     @SerializedName("gallery_data")
     private GalleryData galleryData;
+
+    @SerializedName("crosspost_parent_list")
+    private List<Link> crosspostParentList;
 
     public String getApprovedAtUtc() {
         return approvedAtUtc;
@@ -1239,6 +1243,14 @@ public class Link {
         this.galleryData = galleryData;
     }
 
+    public List<Link> getCrosspostParentList() {
+        return crosspostParentList;
+    }
+
+    public void setCrosspostParentList(List<Link> crosspostParentList) {
+        this.crosspostParentList = crosspostParentList;
+    }
+
     @Override
     public String toString() {
         return "Link{" +
@@ -1354,6 +1366,7 @@ public class Link {
                 ", video=" + video +
                 ", mediaMetadata=" + mediaMetadata +
                 ", galleryData=" + galleryData +
+                ", crosspostParentList=" + crosspostParentList +
                 '}';
     }
 }
