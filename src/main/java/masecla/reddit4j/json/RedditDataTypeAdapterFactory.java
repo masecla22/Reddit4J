@@ -19,6 +19,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import masecla.reddit4j.objects.KindObject;
+import masecla.reddit4j.objects.RedditComment;
 import masecla.reddit4j.objects.RedditData;
 import masecla.reddit4j.objects.RedditListing;
 import masecla.reddit4j.objects.RedditPost;
@@ -50,9 +51,12 @@ public class RedditDataTypeAdapterFactory implements TypeAdapterFactory {
     public static final Map<Class<?>, String> REGISTRY_REVERSE;
 
     static {
+        REGISTRY.put("t1", RedditComment.class);
         REGISTRY.put("t2", RedditProfile.class);
         REGISTRY.put("t3", RedditPost.class);
+        //t4 = message
         REGISTRY.put("t5", RedditSubreddit.class);
+        //t6 = award
         REGISTRY.put("Listing", RedditListing.class);
         // KarmaList is a special case.
 
