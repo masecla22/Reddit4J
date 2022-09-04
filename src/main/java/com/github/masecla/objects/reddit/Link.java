@@ -90,7 +90,7 @@ public class Link {
     private int totalAwardsReceived;
 
     @SerializedName("media_embed")
-    private JsonElement mediaEmbed; // TODO: 18.07.2022 what are the possible values?
+    private MediaEmbed mediaEmbed;
 
     @SerializedName("thumbnail_width")
     private int thumbnailWidth;
@@ -117,7 +117,7 @@ public class Link {
     private String category;
 
     @SerializedName("secure_media_embed")
-    private JsonElement secureMediaEmbed; // TODO: 18.07.2022 What are the possible values?
+    private SecureMediaEmbed secureMediaEmbed;
 
     @SerializedName("link_flair_text")
     private String linkFlairText;
@@ -347,6 +347,82 @@ public class Link {
     @SerializedName("crosspost_parent_list")
     private List<Link> crosspostParentList;
 
+    public static class MediaEmbed {
+        @SerializedName("content")
+        private String content;
+
+        @SerializedName("width")
+        private int width;
+
+        @SerializedName("scrolling")
+        private boolean scrolling;
+
+        @SerializedName("height")
+        private int height;
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public int getWidth() {
+            return width;
+        }
+
+        public void setWidth(int width) {
+            this.width = width;
+        }
+
+        public boolean isScrolling() {
+            return scrolling;
+        }
+
+        public void setScrolling(boolean scrolling) {
+            this.scrolling = scrolling;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+
+        public void setHeight(int height) {
+            this.height = height;
+        }
+
+        @Override
+        public String toString() {
+            return "MediaEmbed{" +
+                    "content='" + content + '\'' +
+                    ", width=" + width +
+                    ", scrolling=" + scrolling +
+                    ", height=" + height +
+                    '}';
+        }
+    }
+
+    public static class SecureMediaEmbed extends MediaEmbed {
+        @SerializedName("media_domain_url")
+        private String mediaDomainUrl;
+
+        public String getMediaDomainUrl() {
+            return mediaDomainUrl;
+        }
+
+        public void setMediaDomainUrl(String mediaDomainUrl) {
+            this.mediaDomainUrl = mediaDomainUrl;
+        }
+
+        @Override
+        public String toString() {
+            return "SecureMediaEmbed{" +
+                    "mediaDomainUrl='" + mediaDomainUrl + '\'' +
+                    "} " + super.toString();
+        }
+    }
+
     public String getApprovedAtUtc() {
         return approvedAtUtc;
     }
@@ -563,11 +639,11 @@ public class Link {
         this.totalAwardsReceived = totalAwardsReceived;
     }
 
-    public JsonElement getMediaEmbed() {
+    public MediaEmbed getMediaEmbed() {
         return mediaEmbed;
     }
 
-    public void setMediaEmbed(JsonElement mediaEmbed) {
+    public void setMediaEmbed(MediaEmbed mediaEmbed) {
         this.mediaEmbed = mediaEmbed;
     }
 
@@ -635,11 +711,11 @@ public class Link {
         this.category = category;
     }
 
-    public JsonElement getSecureMediaEmbed() {
+    public SecureMediaEmbed getSecureMediaEmbed() {
         return secureMediaEmbed;
     }
 
-    public void setSecureMediaEmbed(JsonElement secureMediaEmbed) {
+    public void setSecureMediaEmbed(SecureMediaEmbed secureMediaEmbed) {
         this.secureMediaEmbed = secureMediaEmbed;
     }
 
