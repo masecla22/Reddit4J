@@ -3,4 +3,4 @@
 .project
 /.settings/ 
 /target/
-src/main/java/masecla/reddit4j/main 
+src/main/java/com/github/masecla/main
