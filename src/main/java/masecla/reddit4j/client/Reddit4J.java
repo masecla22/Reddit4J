@@ -47,6 +47,8 @@ public class Reddit4J {
 
     private static String BASE_URL = "https://www.reddit.com";
     private static String OAUTH_URL = "https://oauth.reddit.com";
+    private static int MIN_SUBREDDIT_NAME_CHARS = 3;
+    private static int MAX_SUBREDDIT_NAME_CHARS = 21;
 
     private String username;
     private String password;
@@ -189,14 +191,16 @@ public class Reddit4J {
         return new RedditUserListingEndpointRequest("/prefs/trusted", this);
     }
 
-    private boolean isValidSubredditName(String name) {
-        if (name.length() < 3 || name.length() > 21) {
+    // VisibleForTesting
+    public static boolean isValidSubredditName(String name) {
+        if (name.length() < MIN_SUBREDDIT_NAME_CHARS ||
+                name.length() > MAX_SUBREDDIT_NAME_CHARS ||
+                name.startsWith("_")) {
             return false;
         }
         for (int i = 0; i < name.length(); i++) {
-            char c = name.charAt(i);
-            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') ||
-                (c == '_' && i != 0))) {
+            char c = Character.toUpperCase(name.charAt(i));
+            if (!(c >= 'A' && c <= 'Z') && !(c >= '0' && c <= '9') && c != '_') {
                 return false;
             }
         }
