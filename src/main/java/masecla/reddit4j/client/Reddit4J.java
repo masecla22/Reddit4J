@@ -47,6 +47,8 @@ public class Reddit4J {
 
     private static String BASE_URL = "https://www.reddit.com";
     private static String OAUTH_URL = "https://oauth.reddit.com";
+    private static int MIN_SUBREDDIT_NAME_CHARS = 3;
+    private static int MAX_SUBREDDIT_NAME_CHARS = 21;
 
     private String username;
     private String password;
@@ -189,7 +191,23 @@ public class Reddit4J {
         return new RedditUserListingEndpointRequest("/prefs/trusted", this);
     }
 
-    public RedditSubreddit getSubreddit(String name) throws IOException, InterruptedException {
+    // VisibleForTesting
+    public static boolean isValidSubredditName(String name) {
+        if (name.length() < MIN_SUBREDDIT_NAME_CHARS ||
+                name.length() > MAX_SUBREDDIT_NAME_CHARS ||
+                name.startsWith("_")) {
+            return false;
+        }
+        for (int i = 0; i < name.length(); i++) {
+            char c = Character.toUpperCase(name.charAt(i));
+            if (!(c >= 'A' && c <= 'Z') && !(c >= '0' && c <= '9') && c != '_') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public RedditSubreddit getSubreddit(String name) throws IOException, InterruptedException, IllegalArgumentException {
         if (name.startsWith("r/"))
             name = name.substring(2);
         if (name.startsWith("/"))
@@ -197,12 +215,21 @@ public class Reddit4J {
         if (name.endsWith("/"))
             name = name.substring(0, name.length() - 1);
 
+        if (!isValidSubredditName(name)) {
+            throw new IllegalArgumentException("Subreddit names must be 3-21 characters, consisting of " +
+                    "the letters A-Z, the digits 0-9, and underscore, which must not be in the first " +
+                    "position.");
+        }
+
         Connection conn = useEndpoint("/r/" + name + "/about");
         Response rsp = this.httpClient.execute(conn);
         Gson gson = new RedditSubreddit().getGson();
         JsonObject data = JsonParser.parseString(rsp.body()).getAsJsonObject().getAsJsonObject("data");
         RedditSubreddit result = gson.fromJson(data, RedditSubreddit.class);
         result.setClient(this);
+        if (result.getId() == null) {
+            throw new IllegalArgumentException("There is no subreddit with the name '" + name + "'");
+        }
         return result;
     }
 
