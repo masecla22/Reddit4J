@@ -198,13 +198,7 @@ public class Reddit4J {
                 name.startsWith("_")) {
             return false;
         }
-        for (int i = 0; i < name.length(); i++) {
-            char c = Character.toUpperCase(name.charAt(i));
-            if (!(c >= 'A' && c <= 'Z') && !(c >= '0' && c <= '9') && c != '_') {
-                return false;
-            }
-        }
-        return true;
+        return name.matches("^[a-zA-Z0-9_]*$");
     }
 
     public RedditSubreddit getSubreddit(String name) throws IOException, InterruptedException, IllegalArgumentException {
