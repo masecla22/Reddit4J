@@ -1,5 +1,6 @@
 package masecla.reddit4j.objects;
 
+@KindObject
 public class RedditTrophy extends RedditThing {
 	private String icon_70;
 	private long granted_at;

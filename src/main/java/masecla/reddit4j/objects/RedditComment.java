@@ -1,11 +1,15 @@
 package masecla.reddit4j.objects;
 
+import java.util.List;
+
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+
 import lombok.Data;
 import masecla.reddit4j.objects.adapters.RedditCommentRepliesAdapter;
 
 @Data
+@KindObject
 public class RedditComment extends RedditThing {
     /**
      * who approved this comment. null if nobody or you are not a mod
@@ -99,10 +103,10 @@ public class RedditComment extends RedditThing {
 	private String parentId;
 
     /**
-     *	A list of replies to this comment
+     * A list of replies to this comment
      */
     @JsonAdapter(RedditCommentRepliesAdapter.class)
-    private RedditData<RedditListing<RedditData<RedditComment>>> replies;
+    private List<RedditComment> replies;
 
     /**
      * true if this post is saved by the logged in user

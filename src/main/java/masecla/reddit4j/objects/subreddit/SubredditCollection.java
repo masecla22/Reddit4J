@@ -3,11 +3,7 @@ package masecla.reddit4j.objects.subreddit;
 import java.io.IOException;
 import java.util.UUID;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import masecla.reddit4j.objects.RedditObject;
-import masecla.reddit4j.objects.adapters.UUIDAdapter;
 import masecla.reddit4j.objects.subreddit.enums.DisplayLayout;
 import masecla.reddit4j.requests.CollectionEditingRequest;
 
@@ -28,14 +24,6 @@ public class SubredditCollection extends RedditObject {
 
 	protected void setSubreddit(RedditSubreddit subreddit) {
 		this.subreddit = subreddit;
-	}
-
-	@Override
-	public Gson getGson() {
-		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(UUID.class, new UUIDAdapter());
-		builder.registerTypeAdapter(DisplayLayout.class, DisplayLayout.getAdapter());
-		return builder.create();
 	}
 
 	public CollectionEditingRequest update() {

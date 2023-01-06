@@ -2,6 +2,7 @@ package masecla.reddit4j.objects;
 
 import java.util.List;
 
+@KindObject
 public class RedditListing<T> {
     private String before;
     private String after;
