@@ -3,7 +3,7 @@ package masecla.reddit4j.objects;
 import masecla.reddit4j.client.Reddit4J;
 import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
 
-public class RedditUser extends RedditThing implements RedditUserActions {
+public class RedditUser extends RedditThing implements RedditUserActions, RedditNameable {
 	private Reddit4J client;
 
 	private String name;

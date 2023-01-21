@@ -6,7 +6,13 @@ import lombok.Data;
 import masecla.reddit4j.objects.adapters.RedditCommentRepliesAdapter;
 
 @Data
-public class RedditComment extends RedditThing {
+public class RedditComment extends RedditThing implements RedditNameable {
+
+    /**
+     * the fullname identifier of this comment
+     */
+    private String name;
+
     /**
      * who approved this comment. null if nobody or you are not a mod
      */
