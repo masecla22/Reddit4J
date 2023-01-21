@@ -12,7 +12,7 @@ import java.util.List;
  * AKA t3
  */
 @Data
-public class RedditPost extends RedditThing implements RedditPostActions {
+public class RedditPost extends RedditThing implements RedditPostActions, RedditNameable {
 
     private Reddit4J client;
 

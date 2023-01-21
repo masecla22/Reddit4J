@@ -6,13 +6,14 @@ import com.google.gson.JsonParser;
 import masecla.reddit4j.client.Reddit4J;
 import masecla.reddit4j.exceptions.AuthenticationException;
 import masecla.reddit4j.objects.RedditThing;
+import masecla.reddit4j.objects.RedditNameable;
 import org.jsoup.Connection;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractListingEndpointRequest<T extends RedditThing, S extends AbstractListingEndpointRequest<?, ?>> {
+public abstract class AbstractListingEndpointRequest<T extends RedditThing & RedditNameable, S extends AbstractListingEndpointRequest<?, ?>> {
     protected String endpointPath;
     protected Reddit4J client;
     protected final Class<T> clazz;
@@ -53,7 +54,7 @@ public abstract class AbstractListingEndpointRequest<T extends RedditThing, S ex
     }
 
     public S after(T after) {
-        this.after = (after == null) ? null : after.getId();
+        this.after = (after == null) ? null : after.getName();
         return self;
     }
 
@@ -63,7 +64,7 @@ public abstract class AbstractListingEndpointRequest<T extends RedditThing, S ex
     }
 
     public S before(T before) {
-        this.before = (before == null) ? null : before.getId();
+        this.before = (before == null) ? null : before.getName();
         return self;
     }
 

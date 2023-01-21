@@ -14,7 +14,7 @@ package masecla.reddit4j.objects;
  *
  * @author Matt
  */
-public class RedditThing extends RedditObject {
+public abstract class RedditThing extends RedditObject {
 	private String id;
 
 	public void setId(String id) {
