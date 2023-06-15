@@ -16,7 +16,7 @@ public class RateLimitedClient extends GenericHttpClient {
 	 * This is the maximum amount of requests per minute a client is allowed to do.
 	 * This is according to the https://github.com/reddit-archive/reddit/wiki/API
 	 */
-	private static int RATE_LIMIT_MINUTE = 60;
+	protected static final int RATE_LIMIT_MINUTE = 60;
 
 	public RateLimitedClient() {
 		super();

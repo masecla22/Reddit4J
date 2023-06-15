@@ -45,10 +45,14 @@ import masecla.reddit4j.requests.RedditPreferencesUpdateRequest;
 
 public class Reddit4J {
 
-    private static String BASE_URL = "https://www.reddit.com";
-    private static String OAUTH_URL = "https://oauth.reddit.com";
+    public static final String REDDIT_BASE_URL = "https://www.reddit.com";
+    public static final String REDDIT_OAUTH_URL = "https://oauth.reddit.com";
+
     private static int MIN_SUBREDDIT_NAME_CHARS = 3;
     private static int MAX_SUBREDDIT_NAME_CHARS = 21;
+
+    private String baseUrl = REDDIT_BASE_URL;
+    private String oauthUrl = REDDIT_OAUTH_URL;
 
     private String username;
     private String password;
@@ -70,7 +74,7 @@ public class Reddit4J {
         if (userAgent == null) {
             throw new NullPointerException("User Agent was not set!");
         }
-        Connection conn = Jsoup.connect(BASE_URL + "/api/v1/access_token").ignoreContentType(true)
+        Connection conn = Jsoup.connect(baseUrl + "/api/v1/access_token").ignoreContentType(true)
                 .ignoreHttpErrors(true).method(Method.POST).userAgent(userAgent);
         conn.data("grant_type", "client_credentials");
 
@@ -99,7 +103,7 @@ public class Reddit4J {
         if (userAgent == null) {
             throw new NullPointerException("User Agent was not set!");
         }
-        Connection conn = Jsoup.connect(BASE_URL + "/api/v1/access_token").ignoreContentType(true)
+        Connection conn = Jsoup.connect(baseUrl + "/api/v1/access_token").ignoreContentType(true)
                 .ignoreHttpErrors(true).method(Method.POST).userAgent(userAgent);
         // Set the required params;
         conn.data("grant_type", "password");
@@ -127,7 +131,7 @@ public class Reddit4J {
     }
 
     public Connection useEndpoint(String endpointPath) {
-        Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
+        Connection connection = Jsoup.connect(oauthUrl + endpointPath);
         connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
         connection.maxBodySize(0);
         return connection;
@@ -557,12 +561,22 @@ public class Reddit4J {
         return username;
     }
 
-    public static String BASE_URL() {
-        return BASE_URL;
+    public Reddit4J setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+        return this;
     }
 
-    public static String OAUTH_URL() {
-        return OAUTH_URL;
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public Reddit4J setOauthUrl(String oauthUrl) {
+        this.oauthUrl = oauthUrl;
+        return this;
+    }
+
+    public String getOauthUrl() {
+        return oauthUrl;
     }
 
     private static boolean initialized = false;
