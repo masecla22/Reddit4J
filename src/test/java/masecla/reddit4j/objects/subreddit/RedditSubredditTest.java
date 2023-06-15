@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @WireMockTest
@@ -36,8 +37,8 @@ class RedditSubredditTest {
         RedditSubreddit subreddit = reddit4J.getSubreddit("reddit");
 
         assertNotNull(subreddit);
-
-        String json = subreddit.getGson().toJson(subreddit);
-        System.out.println(json);
+        assertEquals("reddit", subreddit.getDisplayName());
+        assertEquals("/r/reddit/", subreddit.getUrl());
+        assertEquals("5s5qbl", subreddit.getId());
     }
 }
