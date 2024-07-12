@@ -494,10 +494,6 @@ public class Reddit4J {
         return new SubredditPostListingEndpointRequest("/user/" + username + "/submitted", this);
     }
 
-    /**
-     *Get the Raw JSON Response provided the endpoint path
-     * example: "/user/exampleuser/about"
-     */
     public String getRawJson(String endpointPath, Method method) throws IOException, InterruptedException {
         Connection connection = useEndpoint(endpointPath).method(method);
         Response response = this.httpClient.execute(connection);
