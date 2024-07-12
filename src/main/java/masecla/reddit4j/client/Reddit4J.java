@@ -461,12 +461,12 @@ public class Reddit4J {
         return new SubredditPostListingEndpointRequest("/r/" + subreddit + "/" + sorting.getValue(), this);
     }
 
-    public Optional<RedditPost> getPost(String name) throws IOException, InterruptedException {
-        if (!name.startsWith("t3_")) {
-            name = "t3_" + name;
+    public Optional<RedditPost> getPost(String id) throws IOException, InterruptedException {
+        if (!id.startsWith("t3_")) {
+            id = "t3_" + id;
         }
 
-        Connection connection = useEndpoint("/api/info").data("id", name);
+        Connection connection = useEndpoint("/api/info").data("id", id);
         Response response = this.httpClient.execute(connection);
 
         TypeToken<?> ttData3 = TypeToken.getParameterized(RedditData.class, RedditPost.class);
