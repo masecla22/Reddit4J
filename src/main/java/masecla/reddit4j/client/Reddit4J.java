@@ -14,8 +14,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.google.gson.reflect.TypeToken;
-import jdk.jfr.Description;
-import lombok.Value;
 import masecla.reddit4j.objects.KarmaBreakdown;
 import masecla.reddit4j.objects.RedditData;
 import masecla.reddit4j.objects.RedditListing;
