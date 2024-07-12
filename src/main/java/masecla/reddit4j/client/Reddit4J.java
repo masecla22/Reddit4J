@@ -14,6 +14,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.google.gson.reflect.TypeToken;
+import jdk.jfr.Description;
+import lombok.Value;
 import masecla.reddit4j.objects.KarmaBreakdown;
 import masecla.reddit4j.objects.RedditData;
 import masecla.reddit4j.objects.RedditListing;
@@ -490,6 +492,16 @@ public class Reddit4J {
 
     public SubredditPostListingEndpointRequest getUserSubmitted(String username) {
         return new SubredditPostListingEndpointRequest("/user/" + username + "/submitted", this);
+    }
+
+    /**
+     *Get the Raw JSON Response provided the endpoint path
+     * example: "/user/exampleuser/about"
+     */
+    public String getRawJson(String endpointPath, Method method) throws IOException, InterruptedException {
+        Connection connection = useEndpoint(endpointPath).method(method);
+        Response response = this.httpClient.execute(connection);
+        return response.body();
     }
 
     @Deprecated
