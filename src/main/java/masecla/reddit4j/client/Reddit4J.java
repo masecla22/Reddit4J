@@ -511,10 +511,11 @@ public class Reddit4J {
         return response.body();
     }
 
-    public Optional<RedditPost> getRandom(boolean authorized) throws IOException, InterruptedException {
+    public Optional<RedditPost> getRandom(boolean authorized, int limit) throws IOException, InterruptedException {
         Connection connection;
         if (authorized) {
-            connection = useEndpoint("/random.json");
+            assert limit > 0;
+            connection = useEndpoint("/random.json?limit=" + limit);
         }
         else {
             connection = useUnauthorizedEndpoint("/random.json");
