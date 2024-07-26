@@ -133,6 +133,13 @@ public class Reddit4J {
         return connection;
     }
 
+    public Connection useUnauthorizedEndpoint(String endpointPath) {
+        Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
+        connection.ignoreContentType(true).userAgent(userAgent);
+        connection.maxBodySize(0);
+        return connection;
+    }
+
     public void ensureConnection() throws IOException, InterruptedException, AuthenticationException {
         // There is no token
         if (token == null) {
@@ -461,12 +468,12 @@ public class Reddit4J {
         return new SubredditPostListingEndpointRequest("/r/" + subreddit + "/" + sorting.getValue(), this);
     }
 
-    public Optional<RedditPost> getPost(String name) throws IOException, InterruptedException {
-        if (!name.startsWith("t3_")) {
-            name = "t3_" + name;
+    public Optional<RedditPost> getPost(String id) throws IOException, InterruptedException {
+        if (!id.startsWith("t3_")) {
+            id = "t3_" + id;
         }
 
-        Connection connection = useEndpoint("/api/info").data("id", name);
+        Connection connection = useEndpoint("/api/info").data("id", id);
         Response response = this.httpClient.execute(connection);
 
         TypeToken<?> ttData3 = TypeToken.getParameterized(RedditData.class, RedditPost.class);
@@ -490,6 +497,37 @@ public class Reddit4J {
 
     public SubredditPostListingEndpointRequest getUserSubmitted(String username) {
         return new SubredditPostListingEndpointRequest("/user/" + username + "/submitted", this);
+    }
+
+    public String getRawJson(String endpointPath, Method method, boolean authorized) throws IOException, InterruptedException {
+        Connection connection;
+        if (authorized) {
+            connection = useEndpoint(endpointPath).method(method);
+        }
+        else {
+            connection = useUnauthorizedEndpoint(endpointPath).method(method);
+        }
+        Response response = this.httpClient.execute(connection);
+        return response.body();
+    }
+
+    public Optional<RedditPost> getRandom(boolean authorized, int limit) throws IOException, InterruptedException {
+        Connection connection;
+        if (authorized) {
+            assert limit > 0;
+            connection = useEndpoint("/random.json?limit=" + limit);
+        }
+        else {
+            connection = useUnauthorizedEndpoint("/random.json");
+        }
+        Response response = this.httpClient.execute(connection);
+
+        TypeToken<?> ttData3 = TypeToken.getParameterized(RedditData.class, RedditPost.class);
+        TypeToken<?> ttData2 = TypeToken.getParameterized(RedditListing.class, ttData3.getType());
+        TypeToken<?> ttData = TypeToken.getParameterized(RedditData.class, ttData2.getType());
+        RedditData<RedditListing<RedditData<RedditPost>>> fromJson = new Gson().fromJson(JsonParser.parseString(response.body()).getAsJsonArray().get(0), ttData.getType());
+
+        return fromJson.getData().getChildren().stream().findFirst().map(RedditData::getData);
     }
 
     @Deprecated
