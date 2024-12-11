@@ -23,8 +23,7 @@ import masecla.reddit4j.objects.RedditTrophy;
 import masecla.reddit4j.objects.RedditUser;
 import masecla.reddit4j.objects.Sorting;
 import masecla.reddit4j.objects.Vote;
-import masecla.reddit4j.requests.RedditCommentListingEndpointRequest;
-import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
+import masecla.reddit4j.requests.*;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
@@ -40,8 +39,6 @@ import masecla.reddit4j.http.GenericHttpClient;
 import masecla.reddit4j.http.clients.RateLimitedClient;
 import masecla.reddit4j.objects.preferences.RedditPreferences;
 import masecla.reddit4j.objects.subreddit.RedditSubreddit;
-import masecla.reddit4j.requests.RedditUserListingEndpointRequest;
-import masecla.reddit4j.requests.RedditPreferencesUpdateRequest;
 
 public class Reddit4J {
 
@@ -490,6 +487,10 @@ public class Reddit4J {
 
     public SubredditPostListingEndpointRequest getUserSubmitted(String username) {
         return new SubredditPostListingEndpointRequest("/user/" + username + "/submitted", this);
+    }
+
+    public RedditUserCommentListingEndpointRequest getUserComments(String username) {
+        return new RedditUserCommentListingEndpointRequest("/user/" + username + "/comments", this);
     }
 
     @Deprecated
