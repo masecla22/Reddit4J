@@ -500,6 +500,11 @@ public class Reddit4J {
         return new RedditUserCommentListingEndpointRequest("/user/" + username + "/comments", this);
     }
 
+    public RedditSearchListingEndpointRequest getSearchResult(String subReddit) {
+        return new RedditSearchListingEndpointRequest("/r/" + subReddit + "/search", this);
+    }
+
+
     public String getRawJson(String endpointPath, Method method, boolean authorized) throws IOException, InterruptedException {
         Connection connection;
         if (authorized) {
