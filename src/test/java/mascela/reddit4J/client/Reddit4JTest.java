@@ -33,4 +33,5 @@ class Reddit4JTest {
     void isValidSubredditNameFalse(String name) {
         assertFalse(Reddit4J.isValidSubredditName(name));
     }
+
 }

@@ -72,6 +72,8 @@ public class Reddit4JBeta {
 		result.add("/api/spoiler");
 		result.add("/api/unspoiler");
 
+		result.add("/search");
+
 		return result;
 	}
 

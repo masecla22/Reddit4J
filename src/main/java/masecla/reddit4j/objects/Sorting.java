@@ -5,7 +5,9 @@ public enum Sorting {
     NEW("new"),
     RISING("rising"),
     CONTROVERSIAL("controversial"),
-    TOP("top");
+    TOP("top"),
+    COMMENTS("comments"),
+    RELEVANCE("relevance");
 
     private final String value;
 
