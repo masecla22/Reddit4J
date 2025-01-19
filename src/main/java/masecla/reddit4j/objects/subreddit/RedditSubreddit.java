@@ -29,6 +29,8 @@ import masecla.reddit4j.objects.adapters.DimensionAdapter;
 import masecla.reddit4j.objects.preferences.enums.Language;
 import masecla.reddit4j.requests.CollectionCreationRequest;
 
+import static masecla.reddit4j.Utils.Utility.handleErrors;
+
 /**
  * Subreddit.
  * AKA t5
@@ -690,13 +692,7 @@ public class RedditSubreddit extends RedditThing {
 		conn.method(Method.POST);
 		conn.data("collection_id", id.toString());
 		Response rsp = client.getHttpClient().execute(conn);
-		JsonArray array = JsonParser.parseString(rsp.body()).getAsJsonObject().getAsJsonObject("json")
-				.getAsJsonArray("errors");
-		if (array.size() != 0) {
-			List<String> res = new ArrayList<>();
-			array.forEach(c -> res.add(c.toString()));
-			throw new IllegalStateException(String.join(", ", res));
-		}
+		handleErrors(rsp);
 	}
 
 	protected void setFollowCollection(UUID id, boolean follow) throws IOException, InterruptedException {
@@ -707,13 +703,18 @@ public class RedditSubreddit extends RedditThing {
 		if (rsp.statusCode() == 500) {
 			throw new IllegalArgumentException("Collection " + id + " not found!");
 		}
-		JsonArray array = JsonParser.parseString(rsp.body()).getAsJsonObject().getAsJsonObject("json")
-				.getAsJsonArray("errors");
-		if (array.size() != 0) {
-			List<String> res = new ArrayList<>();
-			array.forEach(c -> res.add(c.toString()));
-			throw new IllegalStateException(String.join(", ", res));
+		handleErrors(rsp);
+	}
+
+	protected void reorderCollection(UUID id, String[] linkIds) throws IOException, InterruptedException {
+		Connection conn = client.useEndpoint("/api/v1/collections/reorder_collection");
+		conn = conn.method(Method.POST).ignoreHttpErrors(true);
+		conn.data("collection_id", id.toString()).data("link_ids", String.join(",", linkIds));
+		Response rsp = client.getHttpClient().execute(conn);
+		if (rsp.statusCode() == 500) {
+			throw new IllegalArgumentException("Collection " + id + " not found!");
 		}
+		handleErrors(rsp);
 	}
 
 	public void followCollection(UUID id) throws IOException, InterruptedException {

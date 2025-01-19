@@ -54,6 +54,10 @@ public class SubredditCollection extends RedditObject {
 		subreddit.unfollowCollection(collection_id);
 	}
 
+	public void reorder() throws IOException, InterruptedException {
+		subreddit.reorderCollection(collection_id, link_ids);
+	}
+
 	public String getAuthorId() {
 		return author_id;
 	}
