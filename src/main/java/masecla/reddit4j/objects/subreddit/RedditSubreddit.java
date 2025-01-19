@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import masecla.reddit4j.objects.Sorting;
 import masecla.reddit4j.requests.SubredditPostListingEndpointRequest;
 import org.jsoup.Connection;
@@ -35,6 +36,7 @@ import static masecla.reddit4j.Utils.Utility.handleErrors;
  * Subreddit.
  * AKA t5
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class RedditSubreddit extends RedditThing {
 	@SerializedName("accept_followers")
