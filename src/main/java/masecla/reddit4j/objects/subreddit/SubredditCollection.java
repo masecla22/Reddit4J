@@ -10,6 +10,7 @@ import masecla.reddit4j.objects.RedditObject;
 import masecla.reddit4j.objects.adapters.UUIDAdapter;
 import masecla.reddit4j.objects.subreddit.enums.DisplayLayout;
 import masecla.reddit4j.requests.CollectionEditingRequest;
+import masecla.reddit4j.requests.CollectionPostRequest;
 
 public class SubredditCollection extends RedditObject {
 	private String author_id;
@@ -42,6 +43,10 @@ public class SubredditCollection extends RedditObject {
 		return new CollectionEditingRequest(this, subreddit.getClient());
 	}
 
+	public CollectionPostRequest collectionPost() {
+		return new CollectionPostRequest(this, subreddit.getClient());
+	}
+
 	public void delete() throws IOException, InterruptedException {
 		subreddit.deleteCollection(collection_id);
 	}
@@ -52,6 +57,10 @@ public class SubredditCollection extends RedditObject {
 
 	public void unfollow() throws IOException, InterruptedException {
 		subreddit.unfollowCollection(collection_id);
+	}
+
+	public void reorder() throws IOException, InterruptedException {
+		subreddit.reorderCollection(collection_id, link_ids);
 	}
 
 	public String getAuthorId() {

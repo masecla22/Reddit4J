@@ -41,14 +41,17 @@ public class Reddit4JBeta {
 		// https://www.reddit.com/r/bugs/comments/6bw5hd/needs_captcha_api_method_returns_403_forbidden/
 		result.add("/api/needs_captcha");
 
+		result.add("/api/v1/collections/add_post_to_collection");
 		result.add("/api/v1/collections/collection");
 		result.add("/api/v1/collections/follow_collection");
 		result.add("/api/v1/collections/create_collection");
 		result.add("/api/v1/collections/delete_collection");
+		result.add("/api/v1/collections/reorder_collection");
 		result.add("/api/v1/collections/subreddit_collections");
 		result.add("/api/v1/collections/update_collection_title");
 		result.add("/api/v1/collections/update_collection_display_layout");
 		result.add("/api/v1/collections/update_collection_description");
+		result.add("/api/v1/collections/remove_post_to_collection");
 
 		result.add("/api/v1/subreddit/emojis/all");
 		result.add("/api/v1/subreddit/emoji_custom_size");
