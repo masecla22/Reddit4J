@@ -76,7 +76,9 @@ public class Reddit4JBeta {
 		result.add("/api/unspoiler");
 
 		result.add("/search");
-
+		result.add("/users/search");
+		result.add("/users/popular");
+		result.add("/users/new");
 		return result;
 	}
 

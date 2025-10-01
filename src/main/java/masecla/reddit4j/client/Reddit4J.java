@@ -659,4 +659,29 @@ public class Reddit4J {
     public RedditCommentListingEndpointRequest getCommentsForPost(String subreddit, String id) {
         return new RedditCommentListingEndpointRequest("/r/" + subreddit + "/comments/" + id, this);
     }
+
+
+    /**
+     * Get newly registered users
+     * @return Request object for /users/new endpoint
+     */
+    public RedditUserWhereEndpointRequest getNewUsers() {
+        return new RedditUserWhereEndpointRequest(RedditUserWhereEndpointRequest.UserWhere.NEW, this);
+    }
+
+    /**
+     * Get popular users
+     * @return Request object for /users/popular endpoint
+     */
+    public RedditUserWhereEndpointRequest getPopularUsers() {
+        return new RedditUserWhereEndpointRequest(RedditUserWhereEndpointRequest.UserWhere.POPULAR, this);
+    }
+
+    /**
+     * Search for users
+     * @return Request object for /users/search endpoint
+     */
+    public RedditUserSearchEndpointRequest searchUsers() {
+        return new RedditUserSearchEndpointRequest(this);
+    }
 }
